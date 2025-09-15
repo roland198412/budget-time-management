@@ -1,0 +1,33 @@
+{
+    "preset": "psr12",
+    "rules": {
+        "concat_space": {
+            "spacing": "one"
+        },
+        "single_import_per_statement": false,
+        "no_singleline_whitespace_before_semicolons": true,
+        "space_after_semicolon": true,
+        "group_import": true,
+        "blank_line_between_import_groups": true,
+        "no_blank_lines_after_class_opening": true,
+        "blank_line_after_opening_tag": true,
+        "no_blank_lines_after_phpdoc": true,
+        "no_extra_blank_lines": true,
+        "trim_array_spaces": true,
+        "whitespace_after_comma_in_array": true,
+        "no_unused_imports": true,
+        "class_definition": {
+            "multi_line_extends_each_single_line": true
+        },
+        "method_argument_space": {
+            "on_multiline": "ensure_fully_multiline"
+        },
+        "blank_line_before_statement": {
+            "statements": [
+                "if", "foreach", "return", "continue", "exit", "return", "try", "switch"
+            ]
+        },
+        "phpdoc_separation": true,
+        "array_indentation": true
+    }
+}

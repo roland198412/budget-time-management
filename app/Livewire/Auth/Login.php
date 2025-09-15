@@ -3,13 +3,10 @@
 namespace App\Livewire\Auth;
 
 use Illuminate\Auth\Events\Lockout;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\RateLimiter;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
-use Livewire\Attributes\Layout;
-use Livewire\Attributes\Validate;
+use Livewire\Attributes\{Layout, Validate};
+use Illuminate\Support\Facades\{Auth, RateLimiter, Session};
 use Livewire\Component;
 
 #[Layout('components.layouts.auth')]
@@ -72,6 +69,6 @@ class Login extends Component
      */
     protected function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->email).'|'.request()->ip());
+        return Str::transliterate(Str::lower($this->email) . '|' . request()->ip());
     }
 }
