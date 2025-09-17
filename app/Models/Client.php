@@ -2,11 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\{Model, SoftDeletes};
+use Illuminate\Database\Eloquent\{
+    Factories\HasFactory,
+    Model,
+    SoftDeletes};
 
 class Client extends Model
 {
     use SoftDeletes;
+
+    use HasFactory;
 
     protected $fillable = [
         'name',
