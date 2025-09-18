@@ -18,7 +18,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('settings/password', Password::class)->name('settings.password');
     Route::get('settings/appearance', Appearance::class)->name('settings.appearance');
 
-    Route::get('/clients', \App\Livewire\Clients\Index::class)->name('clients.index');
+    #region Clients
+
+    Route::get('clients', \App\Livewire\Clients\Index::class)->name('clients.index');
+    Route::get('clients/create', \App\Livewire\Clients\Create::class)->name('clients.create');
+    Route::get('clients/edit/{client}', \App\Livewire\Clients\Edit::class)->name('clients.edit');
+
+    #endregion
 });
 
 require __DIR__ . '/auth.php';
