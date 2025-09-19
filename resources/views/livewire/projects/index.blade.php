@@ -1,7 +1,7 @@
 <section>
-    @include('partials.heading', ['heading' => __('Clients'), 'description' => __('Manage your clients') ])
+    @include('partials.heading', ['heading' => __('Projects'), 'description' => __('Manage your projects') ])
     <div class="h-full w-full flex-1">
-        <flux:button variant="primary" size="sm" :href="route('clients.create')" class="mb-4" >
+        <flux:button variant="primary" size="sm" :href="route('projects.create')" class="mb-4" >
             {{ __('Create') }}
         </flux:button>
 
@@ -16,10 +16,19 @@
                         <span class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">{{ __('Name') }}</span>
                     </th>
                     <th class="px-6 py-3 bg-gray-50 text-left border   border-gray-100">
-                        <span class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">{{ __('Clockify Client Id') }}</span>
+                        <span class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">{{ __('Project Type') }}</span>
                     </th>
                     <th class="px-6 py-3 bg-gray-50 text-left border   border-gray-100">
-                        <span class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">{{ __('Clockify Workspace Id') }}</span>
+                        <span class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">{{ __('Client') }}</span>
+                    </th>
+                    <th class="px-6 py-3 bg-gray-50 text-left border   border-gray-100">
+                        <span class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">{{ __('Color') }}</span>
+                    </th>
+                    <th class="px-6 py-3 bg-gray-50 text-left border   border-gray-100">
+                        <span class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">{{ __('Budget') }}</span>
+                    </th>
+                    <th class="px-6 py-3 bg-gray-50 text-left border   border-gray-100">
+                        <span class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">{{ __('Cost Per Hour') }}</span>
                     </th>
                     <th class="px-6 py-3 bg-gray-50 text-left border   border-gray-100">
                         <span class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">{{ __('Created At') }}</span>
@@ -34,32 +43,45 @@
                 </thead>
 
                 <tbody class="bg-white divide-y divide-gray-200 divide-solid">
-                @foreach($clients as $client)
+                @foreach($projects as $project)
                     <tr class="bg-white">
                         <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900 border   border-gray-100 p-1">
-                            {{ $client->id }}
+                            {{ $project->id }}
                         </td>
                         <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900 border   border-gray-100 p-1">
-                            {{ $client->name }}
+                            {{ $project->name }}
                         </td>
                         <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900 border   border-gray-100 p-1">
-                            {{ $client->clockify_client_id }}
+                            {{ $project->project_type ? ucfirst($project->project_type->value) : __('N/A') }}
                         </td>
                         <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900 border   border-gray-100 p-1">
-                            {{ $client->clockify_workspace_id }}
+                            {{ $project->client->name ?? __('N/A') }}
                         </td>
                         <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900 border   border-gray-100 p-1">
-                            {{ $client->created_at }}
+                            @if($project->color)
+                                <div class="w-6 h-6 rounded" style="background-color: {{ $project->color }}"></div>
+                            @else
+                                {{ __('N/A') }}
+                            @endif
                         </td>
                         <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900 border   border-gray-100 p-1">
-                            {{ $client->updated_at }}
+                            {{ $project->budget ? 'R' . number_format($project->budget, 2) : __('N/A') }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900 border   border-gray-100 p-1">
+                            {{ $project->cost_per_hour ? 'R' . number_format($project->cost_per_hour, 2) : __('N/A') }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900 border   border-gray-100 p-1">
+                            {{ $project->created_at }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900 border   border-gray-100 p-1">
+                            {{ $project->updated_at }}
                         </td>
                         <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900 border  border-gray-100 p-1">
-                            <flux:button size="xs" variant="primary" :href="route('clients.edit', $client)">
+                            <flux:button size="xs" variant="primary" :href="route('projects.edit', $project)">
                                 {{ __('Edit') }}
                             </flux:button>
 
-                            <flux:button size="xs" variant="danger" wire:click="delete({{ $client->id }})" wire:confirm="{{ __('Are you sure you want to delete this client?') }}">
+                            <flux:button size="xs" variant="danger" wire:click="delete({{ $project->id }})" wire:confirm="{{ __('Are you sure you want to delete this project?') }}">
                                 {{ __('Delete') }}
                             </flux:button>
                         </td>
@@ -70,7 +92,7 @@
         </div>
 
         <div class="mt-2">
-            {{ $clients->links() }}
+            {{ $projects->links() }}
         </div>
     </div>
 </section>

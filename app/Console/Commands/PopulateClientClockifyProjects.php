@@ -28,12 +28,12 @@ class PopulateClientClockifyProjects extends Command
      */
     public function handle()
     {
-        $this->info('Fetching clients');
+        $this->info(__('Fetching clients'));
 
         $service = new ClockifyService();
 
         Client::all()->each(function (Client $client) use ($service) {
-                $this->info('Fetching projects for client: ' . $client->name);
+                $this->info(__('Fetching projects for client: ') . $client->name);
 
                 $projects = $service->getProjectsByClient($client);
 
@@ -50,9 +50,9 @@ class PopulateClientClockifyProjects extends Command
                         ]);
 
                         if ($projectModel->wasRecentlyCreated) {
-                            $this->info('Created project: ' . $project['name'] . ' for client: ' . $client->name);
+                            $this->info(__('Created project: ') . $project['name'] . __(' for client: ') . $client->name);
                         } else {
-                            $this->info('Updated project: ' . $project['name'] . ' for client: ' . $client->name);
+                            $this->info(__('Updated project: ') . $project['name'] . __(' for client: ') . $client->name);
                         }
                     }
                 }

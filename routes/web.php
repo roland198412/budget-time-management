@@ -25,6 +25,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('clients/edit/{client}', \App\Livewire\Clients\Edit::class)->name('clients.edit');
 
     #endregion
+
+    #region Projects
+
+    Route::get('projects', \App\Livewire\Projects\Index::class)->name('projects.index');
+    Route::get('projects/create', \App\Livewire\Projects\Create::class)->name('projects.create');
+    Route::get('projects/edit/{project}', \App\Livewire\Projects\Edit::class)->name('projects.edit');
+
+    #endregion
 });
 
 require __DIR__ . '/auth.php';
