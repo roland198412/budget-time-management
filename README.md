@@ -93,6 +93,34 @@ Ideal for consultants and service providers where:
 - Configure hourly rates and default project settings
 - Set up automated timesheet delivery schedule
 
+## Available Commands
+
+The application provides the following Artisan commands for managing data and integrations:
+
+### Clockify Integration Commands
+
+#### `php artisan clockify:populate-client-clockify-projects`
+**Description**: Command pulls all clockify projects for a client and populates the projects database table.
+
+**Usage**: 
+```bash
+php artisan clockify:populate-client-clockify-projects
+```
+
+**What it does**:
+- Fetches all clients from the local database
+- For each client, retrieves their associated projects from Clockify
+- Creates or updates project records in the local database with:
+  - Project name
+  - Project color
+  - Clockify project ID
+  - Client association
+- Provides real-time feedback on created/updated projects
+
+**Prerequisites**:
+- Clockify API credentials must be configured in `.env`
+- Clients must exist in the local database with proper Clockify workspace/client ID associations
+
 ## Support
 For technical support or feature requests, please contact the development team.
 
