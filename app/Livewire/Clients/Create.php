@@ -11,6 +11,12 @@ class Create extends Component
     #[Validate('required|string|min:3')]
     public string $name = '';
 
+    #[Validate('required|string')]
+    public string $clockify_client_id = '';
+
+    #[Validate('required|string')]
+    public string $clockify_workspace_id = '';
+
     public function save(): void
     {
         $data = $this->validate();

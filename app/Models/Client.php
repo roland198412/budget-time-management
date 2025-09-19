@@ -15,5 +15,7 @@ class Client extends Model
 
     protected $fillable = [
         'name',
+        'clockify_client_id',
+        'clockify_workspace_id',
     ];
 }
