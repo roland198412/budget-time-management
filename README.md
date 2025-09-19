@@ -121,6 +121,28 @@ php artisan clockify:populate-client-clockify-projects
 - Clockify API credentials must be configured in `.env`
 - Clients must exist in the local database with proper Clockify workspace/client ID associations
 
+#### `php artisan app:populate-clockify-users`
+**Description**: Command to pull all Clockify users and populate the clockify users database table.
+
+**Usage**: 
+```bash
+php artisan app:populate-clockify-users
+```
+
+**What it does**:
+- Fetches all clients from the local database
+- For each client, retrieves their associated users from Clockify
+- Creates or updates user records in the clockify_users table with:
+  - User name
+  - User email
+  - Clockify user ID
+- Provides real-time feedback on created/updated users
+
+**Prerequisites**:
+- Clockify API credentials must be configured in `.env`
+- Clients must exist in the local database with proper Clockify workspace/client ID associations
+- The clockify_users table must be migrated
+
 ## Support
 For technical support or feature requests, please contact the development team.
 
