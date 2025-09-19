@@ -33,6 +33,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('projects/edit/{project}', \App\Livewire\Projects\Edit::class)->name('projects.edit');
 
     #endregion
+
+    #region ClockifyUsers
+
+    Route::get('clockify-users', \App\Livewire\ClockifyUsers\Index::class)->name('clockify-users.index');
+    Route::get('clockify-users/edit/{clockifyUser}', \App\Livewire\ClockifyUsers\Edit::class)->name('clockify-users.edit');
+
+    #endregion
 });
 
 require __DIR__ . '/auth.php';
