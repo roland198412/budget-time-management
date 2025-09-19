@@ -13,9 +13,9 @@ return new class extends Migration {
             $table->string('name');
             $table->string('clockify_project_id');
             $table->foreignIdFor(Client::class)->constrained('clients');
-            $table->string('project_type');
-            $table->float('budget');
-            $table->string('cost_per_hour');
+            $table->string('project_type')->nullable();
+            $table->float('budget')->nullable();
+            $table->string('cost_per_hour')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
