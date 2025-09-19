@@ -35,4 +35,7 @@ return [
         ],
     ],
 
+    'clockify' => [
+        'api_key' => env('CLOCKIFY_API_KEY'),
+    ]
 ];

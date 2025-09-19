@@ -13,6 +13,7 @@ class Project extends Model
 
     protected $fillable = [
         'name',
+        'color',
         'clockify_project_id',
         'client_id',
         'project_type',
