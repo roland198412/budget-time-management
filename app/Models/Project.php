@@ -3,9 +3,8 @@
 namespace App\Models;
 
 use App\Enums\ProjectType;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\{Model, SoftDeletes};
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Project extends Model
 {

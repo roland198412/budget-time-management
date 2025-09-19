@@ -44,7 +44,9 @@ class ClockifyService
 
     /**
      * @param Client $client
+     *
      * @return array
+     *
      * @throws \Illuminate\Http\Client\ConnectionException
      */
     public function getClientUsers(Client $client): array
@@ -62,11 +64,11 @@ class ClockifyService
         throw new \Exception("Failed to fetch workspace users: " . $response->body());
     }
 
-
     /**
      * Retrieves the summary report for a specified client from the Clockify API.
      *
      * @param Client $client The client instance containing identifiers for the Clockify workspace and client.
+     *
      * @return array The decoded JSON response containing the summary report data.
      *
      * @throws \Exception If the API request fails or does not return a successful response.
@@ -89,7 +91,6 @@ class ClockifyService
             ],
         ]);
 
-
         if ($response->successful()) {
             return $response->json();
         }
@@ -103,6 +104,7 @@ class ClockifyService
      * @param Client $client The client instance containing identifiers for the Clockify workspace and client.
      * @param int $page The page number of the detailed report to retrieve.
      * @param int $pageSize The number of records per page in the detailed report.
+     *
      * @return array The decoded JSON response containing the detailed report data.
      *
      * @throws \Exception If the API request fails or does not return a successful response.

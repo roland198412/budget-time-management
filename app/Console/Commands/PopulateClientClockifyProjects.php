@@ -2,8 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Client;
-use App\Models\Project;
+use App\Models\{Client, Project};
 use App\Services\Clockify\ClockifyService;
 use Illuminate\Console\Command;
 
@@ -33,13 +32,14 @@ class PopulateClientClockifyProjects extends Command
         $service = new ClockifyService();
 
         Client::all()->each(function (Client $client) use ($service) {
-                $this->info(__('Fetching projects for client: ') . $client->name);
+            $this->info(__('Fetching projects for client: ') . $client->name);
 
-                $projects = $service->getProjectsByClient($client);
+            $projects = $service->getProjectsByClient($client);
 
-                if (!empty($projects)) {
-                    foreach ($projects as $project) {
-                        $projectModel = Project::updateOrCreate([
+            if (!empty($projects)) {
+                foreach ($projects as $project) {
+                    $projectModel = Project::updateOrCreate(
+                        [
                             'clockify_project_id' => $project['id'],
                         ],
                         [
@@ -47,15 +47,16 @@ class PopulateClientClockifyProjects extends Command
                             'color' => $project['color'],
                             'clockify_project_id' => $project['id'],
                             'client_id' => $client->id,
-                        ]);
+                        ]
+                    );
 
-                        if ($projectModel->wasRecentlyCreated) {
-                            $this->info(__('Created project: ') . $project['name'] . __(' for client: ') . $client->name);
-                        } else {
-                            $this->info(__('Updated project: ') . $project['name'] . __(' for client: ') . $client->name);
-                        }
+                    if ($projectModel->wasRecentlyCreated) {
+                        $this->info(__('Created project: ') . $project['name'] . __(' for client: ') . $client->name);
+                    } else {
+                        $this->info(__('Updated project: ') . $project['name'] . __(' for client: ') . $client->name);
                     }
                 }
+            }
         });
     }
 }

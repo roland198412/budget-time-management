@@ -2,9 +2,7 @@
 
 namespace App\Livewire\Projects;
 
-use App\Models\Project;
-use App\Models\Client;
-use App\Enums\ProjectType;
+use App\Models\{Client, Project};
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 
@@ -34,7 +32,7 @@ class Create extends Component
     public function save(): void
     {
         $data = $this->validate();
-        
+
         // Convert empty strings to null for nullable fields
         $data['color'] = $data['color'] ?: null;
         $data['clockify_project_id'] = $data['clockify_project_id'] ?: null;

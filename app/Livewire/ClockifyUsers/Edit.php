@@ -30,7 +30,7 @@ class Edit extends Component
     public function save(): void
     {
         $data = $this->validate();
-        
+
         // Convert empty strings to null for nullable fields
         $data['clockify_user_id'] = $data['clockify_user_id'] ?: null;
 
