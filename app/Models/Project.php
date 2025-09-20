@@ -4,7 +4,7 @@ namespace App\Models;
 
 use App\Enums\ProjectType;
 use Illuminate\Database\Eloquent\{Model, SoftDeletes};
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\{BelongsTo, BelongsToMany};
 
 class Project extends Model
 {
@@ -27,5 +27,10 @@ class Project extends Model
     public function client(): BelongsTo
     {
         return $this->belongsTo(Client::class);
+    }
+
+    public function buckets(): BelongsToMany
+    {
+        return $this->belongsToMany(Bucket::class);
     }
 }
