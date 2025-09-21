@@ -40,6 +40,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('clockify-users/edit/{clockifyUser}', \App\Livewire\ClockifyUsers\Edit::class)->name('clockify-users.edit');
 
     #endregion
+
+    #region TimeEntries
+
+    Route::get('time-entries', \App\Livewire\TimeEntries\Index::class)->name('time-entries.index');
+
+    #endregion
 });
 
 require __DIR__ . '/auth.php';
