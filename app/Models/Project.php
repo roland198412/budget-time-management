@@ -4,7 +4,7 @@ namespace App\Models;
 
 use App\Enums\ProjectType;
 use Illuminate\Database\Eloquent\{Model, SoftDeletes};
-use Illuminate\Database\Eloquent\Relations\{BelongsTo, BelongsToMany};
+use Illuminate\Database\Eloquent\Relations\{BelongsTo, BelongsToMany, HasMany};
 
 class Project extends Model
 {
@@ -32,5 +32,10 @@ class Project extends Model
     public function buckets(): BelongsToMany
     {
         return $this->belongsToMany(Bucket::class);
+    }
+
+    public function timeEntries(): HasMany
+    {
+        return $this->hasMany(TimeEntry::class, 'clockify_project_id', 'clockify_project_id');
     }
 }
