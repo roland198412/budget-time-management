@@ -8,11 +8,60 @@
             </div>
         @endif
 
-        <div class="mb-4">
-            <input wire:model.live="search" 
-                   type="text" 
-                   placeholder="Search time entries..." 
-                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+        <!-- Search and Filters Section -->
+        <div class="mb-4 space-y-4">
+            <!-- Search -->
+            <div>
+                <input wire:model.live="search" 
+                       type="text" 
+                       placeholder="Search time entries..." 
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+            </div>
+            
+            <!-- Filters Row -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <!-- Date From Filter -->
+                <div>
+                    <flux:field>
+                        <flux:label>{{ __('From Date') }}</flux:label>
+                        <flux:input wire:model.live="dateFrom" type="date" placeholder="{{ __('Select start date') }}" />
+                    </flux:field>
+                </div>
+                
+                <!-- Date To Filter -->
+                <div>
+                    <flux:field>
+                        <flux:label>{{ __('To Date') }}</flux:label>
+                        <flux:input wire:model.live="dateTo" type="date" placeholder="{{ __('Select end date') }}" />
+                    </flux:field>
+                </div>
+                
+                <!-- Project Filter -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('Projects') }}</label>
+                    <select wire:model.live="selectedProjects" 
+                            multiple 
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                        @foreach($projects as $project)
+                            <option value="{{ $project->clockify_project_id }}">
+                                {{ $project->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                
+                <!-- User Filter -->
+                <div>
+                    <flux:field>
+                        <flux:label>{{ __('Users') }}</flux:label>
+                        <flux:select wire:model.live="selectedUsers" multiple placeholder="{{ __('Choose users...') }}">
+                            @foreach($users as $user)
+                                <flux:select.option value="{{ $user->clockify_user_id }}">{{ $user->user_name }}</flux:select.option>
+                            @endforeach
+                        </flux:select>
+                    </flux:field>
+                </div>
+            </div>
         </div>
 
         <div class="w-full align-middle">
@@ -109,5 +158,29 @@
         <div class="mt-2">
             {{ $timeEntries->links() }}
         </div>
+
+        <!-- Project Totals Widget -->
+        @if($projectTotals->isNotEmpty())
+            <div class="mt-6 bg-white border border-gray-300 rounded-lg p-4">
+                <h3 class="text-lg font-medium text-gray-900 mb-4">{{ __('Project Hours Summary') }}</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    @foreach($projectTotals as $projectTotal)
+                        <div class="bg-gray-50 border border-gray-200 rounded-lg p-3">
+                            <div class="flex items-center mb-2">
+                                @if($projectTotal->project_color)
+                                    <div class="w-4 h-4 rounded mr-2" style="background-color: {{ $projectTotal->project_color }}"></div>
+                                @endif
+                                <span class="text-sm font-medium text-gray-900 truncate">
+                                    {{ $projectTotal->project_name ?? 'Unknown Project' }}
+                                </span>
+                            </div>
+                            <div class="text-2xl font-bold text-blue-600">
+                                {{ $projectTotal->total_hours_decimal }}h
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        @endif
     </div>
 </section>
