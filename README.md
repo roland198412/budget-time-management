@@ -143,6 +143,31 @@ php artisan app:populate-clockify-users
 - Clients must exist in the local database with proper Clockify workspace/client ID associations
 - The clockify_users table must be migrated
 
+#### `php artisan clockify:populate-detailed-report`
+**Description**: Command to pull detailed time entries from Clockify and populate the time_entries database table.
+
+**Usage**: 
+```bash
+php artisan clockify:populate-detailed-report
+```
+
+**What it does**:
+- Fetches all clients from the local database
+- For each client, retrieves detailed time entry reports from Clockify
+- Creates or updates time entry records in the time_entries table with:
+  - Time entry description
+  - User information (name, email, Clockify user ID)
+  - Time intervals (start, end, duration)
+  - Project information (name, color, Clockify project ID)
+  - Task information and billing details
+  - Financial data (rates, amounts, currency)
+- Provides real-time feedback on created/updated time entries
+
+**Prerequisites**:
+- Clockify API credentials must be configured in `.env`
+- Clients must exist in the local database with proper Clockify workspace/client ID associations
+- The time_entries table must be migrated
+
 ## Support
 For technical support or feature requests, please contact the development team.
 
