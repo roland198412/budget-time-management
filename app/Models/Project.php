@@ -38,4 +38,9 @@ class Project extends Model
     {
         return $this->hasMany(TimeEntry::class, 'clockify_project_id', 'clockify_project_id');
     }
+
+    public function clockifyUserPayments(): BelongsToMany
+    {
+        return $this->belongsToMany(ClockifyUserPayment::class, 'clockify_user_payment_project_pivot');
+    }
 }
