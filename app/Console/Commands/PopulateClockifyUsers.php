@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Models\{Client, ClockifyUsers};
+use App\Models\{Client, ClockifyUser};
 use App\Services\Clockify\ClockifyService;
 use Illuminate\Console\Command;
 
@@ -38,7 +38,7 @@ class PopulateClockifyUsers extends Command
 
             if (!empty($clockifyUsers)) {
                 foreach ($clockifyUsers as $clockifyUser) {
-                    $clockifyUserModel = ClockifyUsers::updateOrCreate(
+                    $clockifyUserModel = ClockifyUser::updateOrCreate(
                         [
                             'clockify_user_id' => $clockifyUser['id'],
                         ],

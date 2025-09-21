@@ -34,7 +34,7 @@ Route::middleware(['auth'])->group(function () {
 
     #endregion
 
-    #region ClockifyUsers
+    #region ClockifyUser
 
     Route::get('clockify-users', \App\Livewire\ClockifyUsers\Index::class)->name('clockify-users.index');
     Route::get('clockify-users/edit/{clockifyUser}', \App\Livewire\ClockifyUsers\Edit::class)->name('clockify-users.edit');

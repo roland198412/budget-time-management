@@ -2,7 +2,7 @@
 
 namespace App\Livewire\ClockifyUsers;
 
-use App\Models\ClockifyUsers;
+use App\Models\ClockifyUser;
 use Livewire\{Component, WithPagination};
 
 class Index extends Component
@@ -11,11 +11,11 @@ class Index extends Component
 
     public function delete(int $id): void
     {
-        ClockifyUsers::where('id', $id)->delete();
+        ClockifyUser::where('id', $id)->delete();
     }
 
     public function render()
     {
-        return view('livewire.clockify-users.index', ['clockifyUsers' => ClockifyUsers::paginate(15)]);
+        return view('livewire.clockify-users.index', ['clockifyUsers' => ClockifyUser::paginate(15)]);
     }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Livewire\ClockifyUsers;
 
-use App\Models\ClockifyUsers;
+use App\Models\ClockifyUser;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 
@@ -17,9 +17,9 @@ class Edit extends Component
     #[Validate('nullable|string')]
     public string $clockify_user_id = '';
 
-    public ClockifyUsers $clockifyUser;
+    public ClockifyUser $clockifyUser;
 
-    public function mount(ClockifyUsers $clockifyUser): void
+    public function mount(ClockifyUser $clockifyUser): void
     {
         $this->clockifyUser = $clockifyUser;
         $this->name = $clockifyUser->name;

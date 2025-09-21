@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\{Model, SoftDeletes};
 
-class ClockifyUsers extends Model
+class ClockifyUser extends Model
 {
     use SoftDeletes;
 
