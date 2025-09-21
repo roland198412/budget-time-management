@@ -63,4 +63,14 @@ class TimeEntry extends Model
     {
         return $this->belongsTo(ClockifyUser::class, 'clockify_user_id', 'clockify_user_id');
     }
+
+    public function getDurationDecimalAttribute(): string
+    {
+        if (!$this->duration) {
+            return '0,00';
+        }
+        
+        $hours = $this->duration / 3600;
+        return number_format($hours, 2, ',', '');
+    }
 }
