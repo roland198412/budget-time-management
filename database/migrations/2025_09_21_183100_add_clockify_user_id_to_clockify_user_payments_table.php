@@ -10,8 +10,9 @@ return new class() extends Migration {
      */
     public function up(): void
     {
-        Schema::table('time_entries', function (Blueprint $table) {
-            $table->dropSoftDeletes();
+        Schema::table('clockify_user_payments', function (Blueprint $table) {
+            $table->string('clockify_user_id')->after('id');
+            $table->index('clockify_user_id');
         });
     }
 
@@ -20,8 +21,9 @@ return new class() extends Migration {
      */
     public function down(): void
     {
-        Schema::table('time_entries', function (Blueprint $table) {
-            $table->softDeletes();
+        Schema::table('clockify_user_payments', function (Blueprint $table) {
+            $table->dropIndex(['clockify_user_id']);
+            $table->dropColumn('clockify_user_id');
         });
     }
 };

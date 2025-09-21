@@ -3,8 +3,7 @@
 namespace App\Livewire\TimeEntries;
 
 use App\Models\{TimeEntry, Project};
-use Livewire\Component;
-use Livewire\WithPagination;
+use Livewire\{Component, WithPagination};
 
 class Index extends Component
 {
@@ -59,7 +58,7 @@ class Index extends Component
     {
         $timeEntry = TimeEntry::findOrFail($id);
         $timeEntry->delete();
-        
+
         session()->flash('message', 'Time entry deleted successfully.');
     }
 
@@ -116,6 +115,7 @@ class Index extends Component
             ->map(function ($item) {
                 $hours = $item->total_duration / 3600;
                 $item->total_hours_decimal = number_format($hours, 2, ',', '');
+
                 return $item;
             });
 

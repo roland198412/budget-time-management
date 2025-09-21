@@ -19,4 +19,9 @@ class ClockifyUser extends Model
     {
         return $this->hasMany(TimeEntry::class, 'clockify_user_id', 'clockify_user_id');
     }
+
+    public function payments(): HasMany
+    {
+        return $this->hasMany(ClockifyUserPayment::class, 'clockify_user_id', 'clockify_user_id');
+    }
 }

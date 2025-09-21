@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class TimeEntry extends Model
 {
-
     protected $fillable = [
         'clockify_time_entry_id',
         'description',
@@ -67,8 +66,9 @@ class TimeEntry extends Model
         if (!$this->duration) {
             return '0,00';
         }
-        
+
         $hours = $this->duration / 3600;
+
         return number_format($hours, 2, ',', '');
     }
 }
