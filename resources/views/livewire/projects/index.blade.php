@@ -28,7 +28,19 @@
                         <span class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">{{ __('Budget') }}</span>
                     </th>
                     <th class="px-6 py-3 bg-gray-50 text-left border   border-gray-100">
+                        <span class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">{{ __('Remaining Budget') }}</span>
+                    </th>
+                    <th class="px-6 py-3 bg-gray-50 text-left border   border-gray-100">
                         <span class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">{{ __('Cost Per Hour') }}</span>
+                    </th>
+                    <th class="px-6 py-3 bg-gray-50 text-left border   border-gray-100">
+                        <span class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">{{ __('Total Hours') }}</span>
+                    </th>
+                    <th class="px-6 py-3 bg-gray-50 text-left border   border-gray-100">
+                        <span class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">{{ __('Available Hours') }}</span>
+                    </th>
+                    <th class="px-6 py-3 bg-gray-50 text-left border   border-gray-100">
+                        <span class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">{{ __('Used Hours') }}</span>
                     </th>
                     <th class="px-6 py-3 bg-gray-50 text-left border   border-gray-100">
                         <span class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">{{ __('Created At') }}</span>
@@ -68,7 +80,19 @@
                             {{ $project->budget ? 'R' . number_format($project->budget, 2) : __('N/A') }}
                         </td>
                         <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900 border   border-gray-100 p-1">
+                            {{ $project->budget ? 'R' . number_format($project->remaining_budget, 2) : __('N/A') }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900 border   border-gray-100 p-1">
                             {{ $project->cost_per_hour ? 'R' . number_format($project->cost_per_hour, 2) : __('N/A') }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900 border   border-gray-100 p-1">
+                            {{ $project->total_hours }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900 border   border-gray-100 p-1">
+                            {{ $project->available_hours }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900 border   border-gray-100 p-1">
+                            {{ $project->used_hours }}
                         </td>
                         <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900 border   border-gray-100 p-1">
                             {{ $project->created_at }}
