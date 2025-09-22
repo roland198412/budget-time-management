@@ -15,6 +15,15 @@
         <flux:input wire:model="vat_amount" :label="__('VAT Amount')" type="number" step="0.01" min="0" required />
         <flux:input wire:model="payment_date" :label="__('Payment Date')" type="date" required />
 
+        <flux:field>
+            <flux:label>{{ __('Payment Type') }}</flux:label>
+            <flux:select wire:model="payment_type" placeholder="{{ __('Choose payment type...') }}" required>
+                @foreach($paymentTypes as $type)
+                    <flux:select.option value="{{ $type->value }}">{{ $type->value }}</flux:select.option>
+                @endforeach
+            </flux:select>
+        </flux:field>
+
         <div class="space-y-2">
             <flux:label>{{ __('Projects') }}</flux:label>
             <div class="space-y-2 max-h-48 overflow-y-auto border border-gray-300 rounded-lg p-3">

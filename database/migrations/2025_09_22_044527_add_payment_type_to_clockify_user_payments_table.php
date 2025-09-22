@@ -10,8 +10,8 @@ return new class() extends Migration {
      */
     public function up(): void
     {
-        Schema::table('projects', function (Blueprint $table) {
-            $table->float('cost_per_hour')->nullable()->change();
+        Schema::table('clockify_user_payments', function (Blueprint $table) {
+            $table->string('payment_type')->nullable()->after('payment_date');
         });
     }
 
@@ -20,8 +20,8 @@ return new class() extends Migration {
      */
     public function down(): void
     {
-        Schema::table('projects', function (Blueprint $table) {
-            $table->string('cost_per_hour')->nullable()->change();
+        Schema::table('clockify_user_payments', function (Blueprint $table) {
+            $table->dropColumn('payment_type');
         });
     }
 };

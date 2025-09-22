@@ -2,6 +2,7 @@
 
 namespace App\Livewire\ClockifyUserPayments;
 
+use App\Enums\PaymentType;
 use App\Models\{ClockifyUser, ClockifyUserPayment, Project};
 use Livewire\Attributes\Validate;
 use Livewire\Component;
@@ -22,6 +23,9 @@ class Edit extends Component
     #[Validate('required|date')]
     public $payment_date = '';
 
+    #[Validate('required')]
+    public $payment_type = '';
+
     #[Validate('array')]
     public array $selectedProjects = [];
 
@@ -32,6 +36,7 @@ class Edit extends Component
         $this->amount_ex_vat = $payment->amount_ex_vat;
         $this->vat_amount = $payment->vat_amount;
         $this->payment_date = $payment->payment_date->format('Y-m-d');
+        $this->payment_type = $payment->payment_type?->value ?? '';
         $this->selectedProjects = $payment->projects->pluck('id')->toArray();
     }
 
@@ -55,7 +60,8 @@ class Edit extends Component
     {
         return view('livewire.clockify-user-payments.edit', [
             'users' => ClockifyUser::orderBy('name')->get(),
-            'projects' => Project::orderBy('name')->get()
+            'projects' => Project::orderBy('name')->get(),
+            'paymentTypes' => PaymentType::cases()
         ]);
     }
 }

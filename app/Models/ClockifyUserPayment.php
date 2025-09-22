@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\PaymentType;
 use Illuminate\Database\Eloquent\{Model, SoftDeletes};
 use Illuminate\Database\Eloquent\Relations\{BelongsTo, BelongsToMany};
 
@@ -14,12 +15,14 @@ class ClockifyUserPayment extends Model
         'amount_ex_vat',
         'vat_amount',
         'payment_date',
+        'payment_type',
     ];
 
     protected function casts(): array
     {
         return [
             'payment_date' => 'date',
+            'payment_type' => PaymentType::class,
         ];
     }
 

@@ -13,6 +13,9 @@
                         <span class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">{{ __('ID') }}</span>
                     </th>
                     <th class="px-6 py-3 bg-gray-50 text-left border   border-gray-100">
+                        <span class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">{{ __('User') }}</span>
+                    </th>
+                    <th class="px-6 py-3 bg-gray-50 text-left border   border-gray-100">
                         <span class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">{{ __('Amount Ex VAT') }}</span>
                     </th>
                     <th class="px-6 py-3 bg-gray-50 text-left border   border-gray-100">
@@ -20,6 +23,9 @@
                     </th>
                     <th class="px-6 py-3 bg-gray-50 text-left border   border-gray-100">
                         <span class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">{{ __('Payment Date') }}</span>
+                    </th>
+                    <th class="px-6 py-3 bg-gray-50 text-left border   border-gray-100">
+                        <span class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">{{ __('Payment Type') }}</span>
                     </th>
                     <th class="px-6 py-3 bg-gray-50 text-left border   border-gray-100">
                         <span class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">{{ __('Projects') }}</span>
@@ -34,10 +40,17 @@
                 </thead>
 
                 <tbody class="bg-white divide-y divide-gray-200 divide-solid">
-                @foreach($payments as $payment)
+                @forelse($payments as $payment)
                     <tr class="bg-white">
                         <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900 border   border-gray-100 p-1">
                             {{ $payment->id }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900 border   border-gray-100 p-1">
+                            @if($payment->clockifyUser)
+                                {{ $payment->clockifyUser->name }}
+                            @else
+                                {{ $payment->clockify_user_id ?? 'No user' }}
+                            @endif
                         </td>
                         <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900 border   border-gray-100 p-1">
                             {{ number_format($payment->amount_ex_vat, 2) }}
@@ -47,6 +60,9 @@
                         </td>
                         <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900 border   border-gray-100 p-1">
                             {{ $payment->payment_date->format('d/m/Y') }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900 border   border-gray-100 p-1">
+                            {{ $payment->payment_type?->value ?? 'Not specified' }}
                         </td>
                         <td class="px-6 py-4 text-sm leading-5 text-gray-900 border   border-gray-100 p-1">
                             @if($payment->projects->count() > 0)
@@ -77,7 +93,13 @@
                             </flux:button>
                         </td>
                     </tr>
-                @endforeach
+                @empty
+                    <tr>
+                        <td colspan="9" class="px-6 py-4 text-center text-sm text-gray-500 border border-gray-100">
+                            No payments found.
+                        </td>
+                    </tr>
+                @endforelse
                 </tbody>
             </table>
         </div>

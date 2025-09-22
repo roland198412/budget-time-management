@@ -33,7 +33,6 @@ class Project extends Model
         );
     }
 
-
     protected function usedHours(): Attribute
     {
         return Attribute::make(
@@ -62,8 +61,9 @@ class Project extends Model
     protected function availableHours(): Attribute
     {
         return Attribute::make(
-            get: function() {
+            get: function () {
                 $duration = $this->timeEntries()->sum('duration');
+
                 if (empty($duration)) {
                     return $this->total_hours;
                 }

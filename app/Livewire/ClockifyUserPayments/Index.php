@@ -16,6 +16,6 @@ class Index extends Component
 
     public function render()
     {
-        return view('livewire.clockify-user-payments.index', ['payments' => ClockifyUserPayment::with('projects')->paginate(15)]);
+        return view('livewire.clockify-user-payments.index', ['payments' => ClockifyUserPayment::with(['projects', 'clockifyUser'])->paginate(15)]);
     }
 }
