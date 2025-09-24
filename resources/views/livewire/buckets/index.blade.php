@@ -4,6 +4,14 @@
         <flux:button variant="primary" size="sm" :href="route('buckets.create')" class="mb-4" >
             {{ __('Create') }}
         </flux:button>
+        <flux:select wire:model.live="client" placeholder="{{ __('Choose client...') }}" class="mb-4">
+            <flux:select.option value=""> {{ __('Choose client...') }}</flux:select.option>
+            @foreach($clients as $client)
+                <flux:select.option value="{{ $client->id }}" wire:key="{{ $client->id }}">
+                    {{ $client->name }}
+                </flux:select.option>
+            @endforeach
+        </flux:select>
         <div class="w-full align-middle">
             <table class="w-full divide-y border-collapse border border-gray-400">
                 <thead>
