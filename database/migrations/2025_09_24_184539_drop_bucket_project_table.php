@@ -10,6 +10,14 @@ return new class() extends Migration {
      */
     public function up(): void
     {
+        Schema::dropIfExists('bucket_project');
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
         Schema::create('bucket_project', function (Blueprint $table) {
             $table->id();
             $table->foreignId('bucket_id')->constrained()->onDelete('cascade');
@@ -18,13 +26,5 @@ return new class() extends Migration {
 
             $table->unique(['bucket_id', 'project_id']);
         });
-    }
-
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
-    {
-        Schema::dropIfExists('bucket_project');
     }
 };

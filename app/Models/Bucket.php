@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\{
     Relations\BelongsTo,
     SoftDeletes
 };
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Bucket extends Model
 {
@@ -24,10 +23,5 @@ class Bucket extends Model
     public function client(): BelongsTo
     {
         return $this->belongsTo(Client::class);
-    }
-
-    public function projects(): BelongsToMany
-    {
-        return $this->belongsToMany(Project::class);
     }
 }

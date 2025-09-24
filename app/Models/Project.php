@@ -4,7 +4,11 @@ namespace App\Models;
 
 use App\Enums\ProjectType;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\{Model, SoftDeletes};
+use Illuminate\Database\Eloquent\{
+    Attributes\Scope,
+    Builder,
+    Model,
+    SoftDeletes};
 use Illuminate\Database\Eloquent\Relations\{BelongsTo, BelongsToMany, HasMany};
 
 class Project extends Model
@@ -97,5 +101,14 @@ class Project extends Model
     public function clockifyUserPayments(): BelongsToMany
     {
         return $this->belongsToMany(ClockifyUserPayment::class, 'clockify_user_payment_project');
+    }
+
+    /**
+     * To only return projects where the project type is bucket
+     */
+    #[Scope]
+    protected function bucket(Builder $query): void
+    {
+        $query->where('project_type', ProjectType::BUCKET->value);
     }
 }

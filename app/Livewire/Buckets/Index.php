@@ -2,8 +2,7 @@
 
 namespace App\Livewire\Buckets;
 
-use App\Models\Bucket;
-use App\Models\Client;
+use App\Models\{Bucket, Client};
 use Livewire\{Component, WithPagination};
 
 class Index extends Component
