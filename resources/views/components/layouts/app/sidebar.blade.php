@@ -16,7 +16,7 @@
                     <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
                     <flux:navlist.item icon="users" :href="route('clients.index')" :current="request()->routeIs('clients.*')" wire:navigate>{{ __('Clients') }}</flux:navlist.item>
                     <flux:navlist.item icon="presentation-chart-bar" :href="route('projects.index')" :current="request()->routeIs('projects.*')" wire:navigate>{{ __('Projects') }}</flux:navlist.item>
-                    <flux:navlist.item icon="archive-box" :href="route('projects.index')" :current="request()->routeIs('projects.*')" wire:navigate>{{ __('Bucket Management') }}</flux:navlist.item>
+                    <flux:navlist.item icon="archive-box" :href="route('buckets.index')" :current="request()->routeIs('buckets.*')" wire:navigate>{{ __('Bucket Management') }}</flux:navlist.item>
                     <flux:navlist.item icon="user-group" :href="route('clockify-users.index')" :current="request()->routeIs('clockify-users.*')" wire:navigate>{{ __('Clockify Users') }}</flux:navlist.item>
                     <flux:navlist.item icon="clock" :href="route('time-entries.index')" :current="request()->routeIs('time-entries.*')" wire:navigate>{{ __('Time Entries') }}</flux:navlist.item>
                     <flux:navlist.item icon="credit-card" :href="route('clockify-user-payments.index')" :current="request()->routeIs('clockify-user-payments.*')" wire:navigate>{{ __('User Payments') }}</flux:navlist.item>

@@ -34,6 +34,14 @@ Route::middleware(['auth'])->group(function () {
 
     #endregion
 
+    #region Buckets
+
+    Route::get('buckets', \App\Livewire\Buckets\Index::class)->name('buckets.index');
+    Route::get('buckets/create', \App\Livewire\Buckets\Create::class)->name('buckets.create');
+    Route::get('buckets/edit/{bucket}', \App\Livewire\Buckets\Edit::class)->name('buckets.edit');
+
+    #endregion
+
     #region ClockifyUser
 
     Route::get('clockify-users', \App\Livewire\ClockifyUsers\Index::class)->name('clockify-users.index');

@@ -4,8 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\{
     Model,
-    Relations\HasOne,
-    SoftDeletes};
+    Relations\BelongsTo,
+    SoftDeletes
+};
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Bucket extends Model
@@ -16,14 +17,13 @@ class Bucket extends Model
         'hours',
         'cost_per_hour',
         'bucket_start_date',
-        'amount',
         'identifier',
         'client_id'
     ];
 
-    public function client(): HasOne
+    public function client(): BelongsTo
     {
-        return $this->hasOne(Client::class);
+        return $this->belongsTo(Client::class);
     }
 
     public function projects(): BelongsToMany
