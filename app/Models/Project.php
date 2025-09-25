@@ -53,11 +53,15 @@ class Project extends Model
     {
         return Attribute::make(
             get: function () {
+                if ($this->project_type === ProjectType::BUCKET) {
+                    return $this->client->buckets()->sum('hours');
+                }
+
                 if (empty($this->budget)) {
                     return 0;
                 }
 
-                return floor($this->budget / $this->cost_per_hour);
+                return ($this->budget / $this->cost_per_hour);
             }
         );
     }
@@ -66,19 +70,31 @@ class Project extends Model
     {
         return Attribute::make(
             get: function () {
-                $duration = $this->timeEntries()->sum('duration');
+                if ($this->project_type === ProjectType::BUCKET) {
+                    $client = Client::first();
 
-                if (empty($duration)) {
-                    return $this->total_hours;
+                    $duration = $client->projects()
+                        ->bucket()
+                        ->withSum('timeEntries', 'duration')
+                        ->get()
+                        ->sum('time_entries_sum_duration');
+
+                    $totalHours = $this->total_hours;
+                } else {
+                    $totalHours = $this->total_hours;
+                    $duration = $this->timeEntries->sum('duration');
+
+                    if (empty($duration)) {
+                        return $totalHours;
+                    }
                 }
 
                 return number_format(
-                    ($this->total_hours - ($this->timeEntries()->sum('duration') / 3600)),
+                    ($totalHours - ($duration / 3600)),
                     2,
                     ',',
                     ''
                 );
-
             }
         );
     }

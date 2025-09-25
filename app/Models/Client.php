@@ -39,4 +39,9 @@ class Client extends Model
     {
         return $this->hasMany(Project::class, 'client_id');
     }
+
+    public function buckets(): HasMany
+    {
+        return $this->hasMany(Bucket::class, 'client_id');
+    }
 }
