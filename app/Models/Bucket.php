@@ -13,6 +13,7 @@ class Bucket extends Model
     use SoftDeletes;
 
     protected $fillable = [
+        'sequence',
         'hours',
         'cost_per_hour',
         'bucket_start_date',
@@ -39,5 +40,4 @@ class Bucket extends Model
     {
         return $this->belongsTo(Client::class);
     }
-
 }

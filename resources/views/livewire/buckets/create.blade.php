@@ -12,6 +12,7 @@
             @endforeach
         </flux:select>
 
+        <flux:input wire:model="sequence" :label="__('Sequence')" type="number" step="1" min="0" />
         <flux:input wire:model="hours" :label="__('Available Hours')" type="number" step="1" min="0" />
         <flux:input wire:model="cost_per_hour" :label="__('Cost Per Hour')" type="number" step="0.01" min="0" />
 
