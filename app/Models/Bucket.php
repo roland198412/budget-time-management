@@ -3,10 +3,10 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\{
+    Builder,
     Model,
     Relations\BelongsTo,
-    SoftDeletes
-};
+    SoftDeletes};
 
 class Bucket extends Model
 {
@@ -20,6 +20,15 @@ class Bucket extends Model
         'identifier',
         'client_id'
     ];
+
+    protected static function booted(): void
+    {
+        static::addGlobalScope('sequenceOrdering', function (Builder $builder) {
+            $builder->orderBy('sequence')
+                ->orderBy('created_at')
+                ->orderBy('client_id');
+        });
+    }
 
     public function getBucketRemainingHoursAttribute(): string
     {
