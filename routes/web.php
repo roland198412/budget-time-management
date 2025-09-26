@@ -62,6 +62,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('clockify-user-payments/edit/{payment}', \App\Livewire\ClockifyUserPayments\Edit::class)->name('clockify-user-payments.edit');
 
     #endregion
+
+    #region NotificationTemplates
+
+    Route::get('notification-templates', \App\Livewire\NotificationTemplates\Index::class)->name('notification-templates.index');
+    Route::get('notification-templates/create', \App\Livewire\NotificationTemplates\Create::class)->name('notification-templates.create');
+    Route::get('notification-templates/edit/{notificationTemplate}', \App\Livewire\NotificationTemplates\Edit::class)->name('notification-templates.edit');
+
+    #endregion
 });
 
 require __DIR__ . '/auth.php';
