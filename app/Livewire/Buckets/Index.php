@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Buckets;
 
+use App\Helpers\BucketAllocator;
 use App\Models\{Bucket, Client};
 use Livewire\{Component, WithPagination};
 
@@ -26,13 +27,21 @@ class Index extends Component
         Bucket::where('id', $id)->delete();
     }
 
-    public function render()
+    public function render(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\View\View
     {
+        $query = Bucket::when($this->selectedClient, function ($query, $value) {
+            return $query->where('client_id', $value);
+        });
+
+        $buckets = $query->orderBy('client_id')
+            ->orderBy('id')
+            ->paginate(100);
+
+        $buckets = BucketAllocator::allocate($buckets);
+
         return view('livewire.buckets.index', [
-            'buckets' => Bucket::when($this->selectedClient, function ($query, $value) {
-                return $query->where('client_id', $value);
-            })->paginate(100),
-            'clients' => Client::get()
+            'buckets' => $buckets,
+            'clients' => Client::all(),
         ]);
     }
 }

@@ -30,15 +30,18 @@ class Bucket extends Model
         });
     }
 
-    public function getBucketRemainingHoursAttribute(): string
+    public function getTotalDurationAttribute(): float
     {
-        $duration = $this->client->projects()->bucket()
+        return ($this->client->projects()->bucket()
             ->withSum('timeEntries', 'duration')
             ->get()
-            ->sum('time_entries_sum_duration');
+            ->sum('time_entries_sum_duration')) / 3600;
+    }
 
+    public function getBucketRemainingHoursAttribute(): string
+    {
         return number_format(
-            $this->hours - ($duration / 3600),
+            $this->hours - ($this->total_duration),
             2,
             ',',
             ''
