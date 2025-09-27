@@ -26,6 +26,14 @@ Route::middleware(['auth'])->group(function () {
 
     #endregion
 
+    #region Client Contact
+
+    Route::get('client-contacts', \App\Livewire\ClientContact\Index::class)->name('client-contacts.index');
+    Route::get('client-contacts/create', \App\Livewire\ClientContact\Create::class)->name('client-contacts.create');
+    Route::get('client-contacts/edit/{clientContact}', \App\Livewire\ClientContact\Edit::class)->name('client-contacts.edit');
+
+    #endregion
+
     #region Projects
 
     Route::get('projects', \App\Livewire\Projects\Index::class)->name('projects.index');

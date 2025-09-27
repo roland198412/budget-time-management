@@ -98,7 +98,6 @@ class Project extends Model
     {
         return Attribute::make(
             get: function () {
-
                 return number_format(
                     $this->raw_available_hours,
                     2,

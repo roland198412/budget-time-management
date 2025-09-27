@@ -56,7 +56,7 @@ class TimeSheetExport implements FromCollection, WithHeadings, WithMapping, With
         $projectQuery = $this->client->projects();
 
         if ($this->bucketProjectsOnly) {
-            $projectQuery->where('project_type',  ProjectType::BUCKET);
+            $projectQuery->where('project_type', ProjectType::BUCKET);
         }
 
         $projects = $projectQuery->get();
