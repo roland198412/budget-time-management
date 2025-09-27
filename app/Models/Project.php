@@ -33,7 +33,7 @@ class Project extends Model
     protected function remainingBudget(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this?->budget - (($this->timeEntries()->sum('duration') / 3600) * $this->cost_per_hour)
+            get: fn () => ($this?->raw_available_hours ?? 0) * $this->cost_per_hour,
         );
     }
 
@@ -66,7 +66,7 @@ class Project extends Model
         );
     }
 
-    protected function availableHours(): Attribute
+    protected function rawAvailableHours(): Attribute
     {
         return Attribute::make(
             get: function () {
@@ -89,8 +89,18 @@ class Project extends Model
                     }
                 }
 
+                return ($totalHours - ($duration / 3600));
+            }
+        );
+    }
+
+    protected function availableHours(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+
                 return number_format(
-                    ($totalHours - ($duration / 3600)),
+                    $this->raw_available_hours,
                     2,
                     ',',
                     ''
