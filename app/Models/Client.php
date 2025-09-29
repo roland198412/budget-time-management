@@ -35,6 +35,11 @@ class Client extends Model
         return number_format($hours, 2, ',', '');
     }
 
+    public function contacts(): HasMany
+    {
+        return $this->hasMany(ClientContact::class, 'client_id');
+    }
+
     public function projects(): HasMany
     {
         return $this->hasMany(Project::class, 'client_id');
