@@ -34,7 +34,7 @@ class Index extends Component
         });
 
         $buckets = $query->orderBy('client_id')
-            ->orderBy('id')
+            ->orderBy('sequence')
             ->paginate(100);
 
         $buckets = BucketAllocator::allocate($buckets);
