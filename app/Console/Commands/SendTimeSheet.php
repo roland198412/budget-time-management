@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\{Client, User};
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Notification;
 
 use App\Notifications\TimeSheetNotification;
 use Carbon\Carbon;
@@ -53,14 +54,25 @@ class SendTimeSheet extends Command
             return 1;
         }
 
-        $users = User::all();
         $client = Client::find($clientId);
+        if (!$client) {
+            $this->error('Client not found.');
 
-        foreach ($users as $user) {
-            // Send notification
-            $user->notify(new TimeSheetNotification($start, $end, $client, $bucketProjectsOnly));
+            return 1;
         }
 
-        $this->info("Timesheets sent successfully for client ID {$clientId}!");
+        $contacts = $client->contacts;
+        $emails = $contacts->pluck('email')->toArray();
+        $names = $contacts->pluck('firstname')->toArray();
+        if (empty($emails)) {
+            $this->error('No contacts found for this client.');
+
+            return 1;
+        }
+
+        Notification::route('mail', $emails)
+            ->notify(new TimeSheetNotification($start, $end, $client, $bucketProjectsOnly, $names));
+
+        $this->info("Timesheet sent successfully to all contacts for client ID {$clientId}!");
     }
 }
