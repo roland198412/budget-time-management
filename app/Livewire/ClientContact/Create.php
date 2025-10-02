@@ -8,6 +8,9 @@ use Livewire\Component;
 
 class Create extends Component
 {
+    #[Validate('required|numeric|min:1')]
+    public int $sequence = 0;
+
     #[Validate('required|string|min:2')]
     public string $firstname = '';
 

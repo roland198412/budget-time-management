@@ -2,6 +2,7 @@
     @include('partials.heading', ['heading' => __('New Client Contact'), 'description' => __('Create new client contact') ])
 
     <form wire:submit="save" class="my-6 w-full space-y-6">
+        <flux:input wire:model="sequence" :label="__('Sequence')" type="number" step="1" min="0" />
         <flux:input wire:model="firstname" :label="__('First Name')" type="text" required autofocus autocomplete="firstname" />
         <flux:input wire:model="lastname" :label="__('Last Name')" type="text" required />
         <flux:input wire:model="email" :label="__('Email')" type="email" required />

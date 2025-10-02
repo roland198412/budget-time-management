@@ -13,6 +13,9 @@
                         <span class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">{{ __('ID') }}</span>
                     </th>
                     <th class="px-6 py-3 bg-gray-50 text-left border   border-gray-100">
+                        <span class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">{{ __('Sequence') }}</span>
+                    </th>
+                    <th class="px-6 py-3 bg-gray-50 text-left border   border-gray-100">
                         <span class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">{{ __('Client') }}</span>
                     </th>
                     <th class="px-6 py-3 bg-gray-50 text-left border   border-gray-100">
@@ -38,6 +41,9 @@
                     <tr class="bg-white">
                         <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900 border   border-gray-100 p-1">
                             {{ $clientContact->id }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900 border   border-gray-100 p-1">
+                            {{ $clientContact->sequence }}
                         </td>
                         <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900 border   border-gray-100 p-1">
                             {{ $clientContact->client->name ?? __('N/A') }}

@@ -18,6 +18,7 @@ class ClientContact extends Model
         'lastname',
         'email',
         'client_id',
+        'sequence'
     ];
 
     protected function fullName(): Attribute
@@ -30,5 +31,12 @@ class ClientContact extends Model
     public function client(): BelongsTo
     {
         return $this->belongsTo(Client::class);
+    }
+
+    protected static function booted()
+    {
+        static::addGlobalScope('orderBySequence', function ($query) {
+            $query->orderBy('sequence');
+        });
     }
 }

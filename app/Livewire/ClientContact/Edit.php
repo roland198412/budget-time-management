@@ -8,6 +8,9 @@ use Livewire\Component;
 
 class Edit extends Component
 {
+    #[Validate('required|numeric|min:1')]
+    public int $sequence = 0;
+
     #[Validate('required|string|min:2')]
     public string $firstname = '';
 
@@ -25,6 +28,7 @@ class Edit extends Component
     public function mount(ClientContact $clientContact): void
     {
         $this->clientContact = $clientContact;
+        $this->sequence = $clientContact->sequence;
         $this->firstname = $clientContact->firstname;
         $this->lastname = $clientContact->lastname;
         $this->email = $clientContact->email;
