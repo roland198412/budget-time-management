@@ -17,8 +17,7 @@
                         <div class="flex justify-between items-center mb-1">
                             <span class="text-sm font-medium text-gray-700 dark:text-neutral-300">Total Budget</span>
                             <span class="text-sm font-semibold text-gray-900 dark:text-neutral-100">
-
-                                R {{ number_format($client->buckets()->sum('hours') * $client->cost_per_hour, 2) }} ({{ $client->buckets()->count() }} {{ __('Buckets') }})
+                                R {{ number_format($client->total_budget, 2) }} ({{ $client->buckets()->count() }} {{ __('Buckets') }})
                             </span>
                         </div>
                         <div class="w-full bg-gray-200 dark:bg-neutral-700 rounded-full h-2.5">

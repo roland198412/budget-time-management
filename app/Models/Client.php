@@ -54,4 +54,9 @@ class Client extends Model
     {
         return $this->hasMany(Bucket::class, 'client_id');
     }
+
+    public function getTotalBudgetAttribute(): float
+    {
+        return $this->buckets()->sum('hours') * $this->cost_per_hour;
+    }
 }
