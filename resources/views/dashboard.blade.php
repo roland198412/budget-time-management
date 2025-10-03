@@ -81,8 +81,28 @@
                         </div>
                     </div>
 
-                    <!-- Individual Bucket Status -->
-                    <div class="space-y-2 mb-4">
+                    @if($client->total_budget > 0 && ($client->total_budget - $client->total_paid) < ($client->total_budget * 0.2))
+                        <p class="text-sm text-red-500 mt-2">
+                            <svg class="inline w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                            </svg>
+                            Low balance warning
+                        </p>
+                    @endif
+                </div>
+                @endforeach
+            </div>
+
+            <!-- Second card: Bucket Overview -->
+            <div class="flex flex-col items-start justify-start relative aspect-video overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700 bg-gray-100 dark:bg-neutral-900 p-4">
+                @foreach($clients as $client)
+                    <div class="w-full">
+                        <div class="flex items-center justify-between mb-4">
+                            <h2 class="text-lg font-semibold text-gray-800 dark:text-neutral-100">
+                                {{ $client->name }}
+                            </h2>
+                            <span class="text-sm text-gray-500 dark:text-neutral-400">Bucket Overview</span>
+                        </div>
                         <div class="flex justify-between items-center bg-gray-50 dark:bg-neutral-800 p-2 rounded-lg mb-3">
                             <span class="text-sm font-semibold text-gray-700 dark:text-neutral-300">Bucket Overview</span>
                             <div class="flex items-center gap-2">
@@ -108,7 +128,7 @@
                             $activeBuckets = $buckets->filter(fn($b) => $b->hours > 0 && $b->used < $b->hours);
                             $depletedBuckets = $buckets->filter(fn($b) => $b->hours > 0 && $b->used >= $b->hours);
                         @endphp
-                        <div class="space-y-3">
+                        <div class="space-y-3 overflow-y-auto max-h-[calc(100vh-24rem)]">
                             @foreach($activeBuckets as $bucket)
                                 @php
                                     $percentage = ($bucket->used / $bucket->hours) * 100;
@@ -167,28 +187,7 @@
                             @endif
                         </div>
                     </div>
-
-                    @if($client->total_budget > 0 && ($client->total_budget - $client->total_paid) < ($client->total_budget * 0.2))
-                        <p class="text-sm text-red-500 mt-2">
-                            <svg class="inline w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
-                            </svg>
-                            Low balance warning
-                        </p>
-                    @endif
-                </div>
                 @endforeach
-            </div>
-
-
-            <!-- Second card: buckets with client and gradient fill -->
-            <div class="flex flex-col items-center justify-center relative aspect-video overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700 bg-gray-100 dark:bg-neutral-900 p-4">
-                <x-placeholder-pattern class="absolute inset-0 size-full stroke-gray-900/20 dark:stroke-neutral-100/20" />
-            </div>
-
-            <!-- Third card: placeholder -->
-            <div class="relative aspect-video overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700">
-                <x-placeholder-pattern class="absolute inset-0 size-full stroke-gray-900/20 dark:stroke-neutral-100/20" />
             </div>
         </div>
 
