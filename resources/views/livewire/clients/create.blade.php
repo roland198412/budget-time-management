@@ -3,6 +3,7 @@
 
     <form wire:submit="save" class="my-6 w-full space-y-6">
         <flux:input wire:model="name" :label="__('Name')" type="text" required autofocus autocomplete="name" />
+        <flux:input wire:model="cost_per_hour" :label="__('Cost Per Hour')" type="number" step="0.01" min="0" />
         <flux:input wire:model="clockify_client_id" :label="__('Clockify Client Id')" type="text" required autofocus autocomplete="clockify_client_id" />
         <flux:input wire:model="clockify_workspace_id" :label="__('Clockify Workspace Id')" type="text" required autofocus autocomplete="clockify_workspace_id" />
 

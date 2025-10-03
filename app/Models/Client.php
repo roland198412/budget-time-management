@@ -16,8 +16,13 @@ class Client extends Model
 
     protected $fillable = [
         'name',
+        'cost_per_hour',
         'clockify_client_id',
         'clockify_workspace_id',
+    ];
+
+    protected $casts = [
+        'cost_per_hour' => 'float',
     ];
 
     public function getTotalBucketDurationAttribute(): int

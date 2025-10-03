@@ -15,6 +15,9 @@
                     <th class="px-6 py-3 bg-gray-50 text-left border   border-gray-100">
                         <span class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">{{ __('Name') }}</span>
                     </th>
+                    <th class="px-6 py-3 bg-gray-50 text-left border border-gray-100">
+                        <span class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">{{ __('Cost per Hour') }}</span>
+                    </th>
                     <th class="px-6 py-3 bg-gray-50 text-left border   border-gray-100">
                         <span class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">{{ __('Clockify Client Id') }}</span>
                     </th>
@@ -41,6 +44,9 @@
                         </td>
                         <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900 border   border-gray-100 p-1">
                             {{ $client->name }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900 border border-gray-100 p-1">
+                            {{ $client->cost_per_hour }}
                         </td>
                         <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900 border   border-gray-100 p-1">
                             {{ $client->clockify_client_id }}

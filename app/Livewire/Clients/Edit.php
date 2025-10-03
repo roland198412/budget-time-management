@@ -11,6 +11,9 @@ class Edit extends Component
     #[Validate('required|string|min:3')]
     public string $name = '';
 
+    #[Validate('numeric|min:0')]
+    public float $cost_per_hour = 0;
+
     #[Validate('required|string')]
     public string $clockify_client_id = '';
 
@@ -23,6 +26,7 @@ class Edit extends Component
     {
         $this->client = $client;
         $this->name = $client->name;
+        $this->cost_per_hour = $client->cost_per_hour;
         $this->clockify_client_id = $client->clockify_client_id;
         $this->clockify_workspace_id = $client->clockify_workspace_id;
     }

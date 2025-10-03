@@ -11,6 +11,9 @@ class Create extends Component
     #[Validate('required|string|min:3')]
     public string $name = '';
 
+    #[Validate('nullable|numeric|min:0')]
+    public float $cost_per_hour = 0;
+
     #[Validate('required|string')]
     public string $clockify_client_id = '';
 
