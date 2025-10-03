@@ -59,4 +59,15 @@ class Client extends Model
     {
         return $this->buckets()->sum('hours') * $this->cost_per_hour;
     }
+
+    public function getTotalPaidAttribute(): float
+    {
+        return $this->projects()
+            ->bucket()
+            ->join('clockify_user_payment_project', 'projects.id', '=', 'clockify_user_payment_project.project_id')
+            ->join('clockify_user_payments', 'clockify_user_payment_project.clockify_user_payment_id', '=', 'clockify_user_payments.id')
+            ->select('clockify_user_payments.id', 'clockify_user_payments.amount_ex_vat')
+            ->distinct()
+            ->sum('clockify_user_payments.amount_ex_vat') ?? 0;
+    }
 }
