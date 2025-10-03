@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Models\{Client, User};
+use App\Models\Client;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Notification;
 
@@ -55,6 +55,7 @@ class SendTimeSheet extends Command
         }
 
         $client = Client::find($clientId);
+
         if (!$client) {
             $this->error('Client not found.');
 
@@ -64,6 +65,7 @@ class SendTimeSheet extends Command
         $contacts = $client->contacts;
         $emails = $contacts->pluck('email')->toArray();
         $names = $contacts->pluck('firstname')->toArray();
+
         if (empty($emails)) {
             $this->error('No contacts found for this client.');
 
@@ -74,5 +76,7 @@ class SendTimeSheet extends Command
             ->notify(new TimeSheetNotification($start, $end, $client, $bucketProjectsOnly, $names));
 
         $this->info("Timesheet sent successfully to all contacts for client ID {$clientId}!");
+
+        return 0;
     }
 }
