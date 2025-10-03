@@ -12,82 +12,162 @@
                         <span class="text-sm text-gray-500 dark:text-neutral-400">Budget Overview</span>
                     </div>
 
-                    <!-- Total Budget Bar -->
-                    <div class="mb-4">
-                        <div class="flex justify-between items-center mb-1">
-                            <span class="text-sm font-medium text-gray-700 dark:text-neutral-300">Total Budget</span>
-                            <span class="text-sm font-semibold text-gray-900 dark:text-neutral-100">
-                                R {{ number_format($client->total_budget, 2) }} ({{ $client->buckets()->count() }} {{ __('Buckets') }})
-                            </span>
+                    <div class="space-y-3 mb-6">
+                        <!-- Total Budget Bar -->
+                        <div class="p-2 rounded-lg bg-gray-50 dark:bg-neutral-800/50">
+                            <div class="flex justify-between items-center text-sm mb-2">
+                                <span class="font-medium text-gray-700 dark:text-neutral-300">
+                                    Total Budget
+                                    @php
+                                        $activeBucketCount = $client->buckets
+                                            ->sortBy('sequence')
+                                            ->pipe(fn($buckets) => \App\Helpers\BucketAllocator::allocate($buckets))
+                                            ->filter(fn($b) => $b->hours > 0 && ($b->used / $b->hours) < 100)
+                                            ->count();
+                                    @endphp
+                                    <span class="inline-flex items-center ml-2 px-1.5 py-0.5 rounded-full text-xs font-medium {{ $activeBucketCount > 0 ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200' : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200' }}">
+                                        {{ $activeBucketCount }} {{ __(' Bucket'.($activeBucketCount !== 1 ? 's' : '')) }}
+                                    </span>
+                                </span>
+                                <span class="text-gray-900 dark:text-neutral-100 font-semibold">
+                                    R {{ number_format($client->total_budget, 2) }}
+                                </span>
+                            </div>
+                            <div class="w-full bg-gray-200 dark:bg-neutral-700 rounded-full h-2">
+                                <div class="bg-blue-600 h-2 rounded-full" style="width: 100%"></div>
+                            </div>
                         </div>
-                        <div class="w-full bg-gray-200 dark:bg-neutral-700 rounded-full h-2.5">
-                            <div class="bg-blue-600 h-2.5 rounded-full" style="width: 100%"></div>
-                        </div>
-                    </div>
 
-                    <!-- Paid Hours Bar -->
-                    <div class="mb-4">
-                        <div class="flex justify-between items-center mb-1">
-                            <span class="text-sm font-medium text-gray-700 dark:text-neutral-300">Paid to Developers</span>
-                            <span class="text-sm font-semibold {{ $client->total_paid > $client->total_budget ? 'text-red-500' : 'text-gray-900 dark:text-neutral-100' }}">
-                                R {{ number_format($client->total_paid, 2) }}
-                            </span>
+                        <!-- Paid Hours Bar -->
+                        <div class="p-2 rounded-lg {{ $client->total_paid > $client->total_budget ? 'bg-red-50 dark:bg-red-950/20' : 'bg-gray-50 dark:bg-neutral-800/50' }}">
+                            <div class="flex justify-between items-center text-sm mb-2">
+                                <span class="font-medium text-gray-700 dark:text-neutral-300">
+                                    Paid to Developers
+                                    @if($client->total_paid > $client->total_budget)
+                                        <span class="inline-flex items-center ml-2 px-1.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200">
+                                            Over Budget
+                                        </span>
+                                    @endif
+                                </span>
+                                <span class="{{ $client->total_paid > $client->total_budget ? 'text-red-600 dark:text-red-400 font-semibold' : 'text-gray-900 dark:text-neutral-100' }}">
+                                    R {{ number_format($client->total_paid, 2) }}
+                                </span>
+                            </div>
+                            <div class="w-full bg-gray-200 dark:bg-neutral-700 rounded-full h-2">
+                                <div class="bg-orange-500 h-2 rounded-full transition-all duration-300"
+                                     style="width: @if($client->total_budget > 0){{ min(($client->total_paid / $client->total_budget) * 100, 100) }}@else 0 @endif%">
+                                </div>
+                            </div>
                         </div>
-                        <div class="w-full bg-gray-200 dark:bg-neutral-700 rounded-full h-2.5">
-                            <div class="bg-orange-500 h-2.5 rounded-full transition-all duration-300"
-                                 style="width: {{ $client->total_budget > 0 ? min(($client->total_paid / $client->total_budget) * 100, 100) : 0 }}%"></div>
-                        </div>
-                    </div>
 
-                    <!-- Available Balance Bar -->
-                    <div class="mb-2">
-                        <div class="flex justify-between items-center mb-1">
-                            <span class="text-sm font-medium text-gray-700 dark:text-neutral-300">Available in Bank</span>
-                            <span class="text-sm font-semibold {{ ($client->total_budget - $client->total_paid) < 0 ? 'text-red-500' : 'text-green-600' }}">
-                                R {{ number_format($client->total_budget - $client->total_paid, 2) }}
-                            </span>
-                        </div>
-                        <div class="w-full bg-gray-200 dark:bg-neutral-700 rounded-full h-2.5">
-                            <div class="bg-green-500 h-2.5 rounded-full transition-all duration-300"
-                                 style="width: {{ $client->total_budget > 0 ? max(min((($client->total_budget - $client->total_paid) / $client->total_budget) * 100, 100), 0) : 0 }}%"></div>
+                        <!-- Available Balance Bar -->
+                        <div class="p-2 rounded-lg {{ ($client->total_budget - $client->total_paid) < ($client->total_budget * 0.2) ? 'bg-red-50 dark:bg-red-950/20' : 'bg-gray-50 dark:bg-neutral-800/50' }}">
+                            <div class="flex justify-between items-center text-sm mb-2">
+                                <span class="font-medium text-gray-700 dark:text-neutral-300">
+                                    Available in Bank
+                                    @if(($client->total_budget - $client->total_paid) < ($client->total_budget * 0.2))
+                                        <span class="inline-flex items-center ml-2 px-1.5 py-0.5 rounded-full text-xs font-medium {{ ($client->total_budget - $client->total_paid) < 0 ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200' : 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200' }}">
+                                            {{ ($client->total_budget - $client->total_paid) < 0 ? 'Negative Balance' : 'Low Balance' }}
+                                        </span>
+                                    @endif
+                                </span>
+                                <span class="{{ ($client->total_budget - $client->total_paid) < 0 ? 'text-red-600 dark:text-red-400 font-semibold' : (($client->total_budget - $client->total_paid) < ($client->total_budget * 0.2) ? 'text-orange-600 dark:text-orange-400 font-semibold' : 'text-green-600 dark:text-green-400 font-semibold') }}">
+                                    R {{ number_format($client->total_budget - $client->total_paid, 2) }}
+                                </span>
+                            </div>
+                            <div class="w-full bg-gray-200 dark:bg-neutral-700 rounded-full h-2">
+                                <div class="bg-green-500 h-2 rounded-full transition-all duration-300"
+                                     style="width: @if($client->total_budget > 0){{ max(min((($client->total_budget - $client->total_paid) / $client->total_budget) * 100, 100), 0) }}@else 0 @endif%">
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <!-- Individual Bucket Status -->
                     <div class="space-y-2 mb-4">
-                        <div class="flex justify-between items-center">
-                            <span class="text-sm font-medium text-gray-700 dark:text-neutral-300">Bucket Status</span>
+                        <div class="flex justify-between items-center bg-gray-50 dark:bg-neutral-800 p-2 rounded-lg mb-3">
+                            <span class="text-sm font-semibold text-gray-700 dark:text-neutral-300">Bucket Overview</span>
+                            <div class="flex items-center gap-2">
+                                @php
+                                    $buckets = $client->buckets->sortBy('sequence');
+                                    $allocatedBuckets = \App\Helpers\BucketAllocator::allocate($buckets);
+                                    $activeBucketCount = $allocatedBuckets->filter(fn($b) => $b->hours > 0 && ($b->used / $b->hours) < 100)->count();
+                                    $depletedBucketCount = $allocatedBuckets->filter(fn($b) => $b->hours > 0 && ($b->used / $b->hours) >= 100)->count();
+                                @endphp
+                                <span class="text-xs {{ $activeBucketCount > 0 ? 'text-gray-500 dark:text-neutral-400' : 'text-red-500 dark:text-red-400' }}">
+                                    {{ $activeBucketCount }} {{ __('Active') }}
+                                </span>
+                                @if($client->buckets->filter(fn($b) => $b->hours > 0 && ($b->used / $b->hours) >= 100)->count() > 0)
+                                    <span class="text-xs text-red-500 dark:text-red-400">
+                                        {{ $client->buckets->filter(fn($b) => $b->hours > 0 && ($b->used / $b->hours) >= 100)->count() }} Depleted
+                                    </span>
+                                @endif
+                            </div>
                         </div>
                         @php
                             $buckets = $client->buckets->sortBy('sequence');
                             $buckets = \App\Helpers\BucketAllocator::allocate($buckets)->sortByDesc('sequence');
+                            $activeBuckets = $buckets->filter(fn($b) => $b->hours > 0 && ($b->used / $b->hours) < 100);
+                            $depletedBuckets = $buckets->filter(fn($b) => $b->hours > 0 && ($b->used / $b->hours) >= 100);
                         @endphp
-                        @foreach($buckets as $bucket)
-                            @php
-                                $percentage = $bucket->hours > 0 ? ($bucket->used / $bucket->hours) * 100 : 0;
-                                $statusColor = match(true) {
-                                    $percentage >= 100 => 'bg-red-500',
-                                    $percentage >= 80 => 'bg-orange-500',
-                                    $percentage >= 50 => 'bg-yellow-500',
-                                    default => 'bg-green-500'
-                                };
-                            @endphp
-                            <div class="space-y-1">
-                                <div class="flex justify-between items-center text-sm">
-                                    <span class="font-medium text-gray-600 dark:text-neutral-400">
-                                        {{ $bucket->identifier ?? "Bucket " . $bucket->sequence }}
-                                    </span>
-                                    <span class="{{ $percentage >= 80 ? 'text-red-500 font-semibold' : 'text-gray-600 dark:text-neutral-400' }}">
-                                        {{ number_format($bucket->used, 2) }}/{{ number_format($bucket->hours, 2) }}h
-                                    </span>
-                                </div>
-                                <div class="w-full bg-gray-200 dark:bg-neutral-700 rounded-full h-1.5">
-                                    <div class="{{ $statusColor }} h-1.5 rounded-full transition-all duration-300"
-                                         style="width: {{ min($percentage, 100) }}%">
+                        <div class="space-y-3">
+                            @foreach($activeBuckets as $bucket)
+                                @php
+                                    $percentage = ($bucket->used / $bucket->hours) * 100;
+                                    $statusColor = match(true) {
+                                        $percentage >= 80 => 'bg-orange-500',
+                                        $percentage >= 50 => 'bg-yellow-500',
+                                        default => 'bg-green-500'
+                                    };
+                                @endphp
+                                <div class="p-2 rounded-lg {{ $percentage >= 80 ? 'bg-red-50 dark:bg-red-950/20' : 'bg-gray-50 dark:bg-neutral-800/50' }}">
+                                    <div class="flex justify-between items-center text-sm mb-2">
+                                        <span class="font-medium text-gray-700 dark:text-neutral-300">
+                                            {{ $bucket->identifier ?? "Bucket " . $bucket->sequence }}
+                                            @if($percentage >= 80)
+                                                <span class="inline-flex items-center ml-2 px-1.5 py-0.5 rounded-full text-xs font-medium {{ $percentage >= 100 ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200' : 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200' }}">
+                                                    {{ $percentage >= 100 ? 'Depleted' : 'Warning' }}
+                                                </span>
+                                            @endif
+                                        </span>
+                                        <span class="{{ $percentage >= 80 ? 'text-red-600 dark:text-red-400 font-semibold' : 'text-gray-600 dark:text-neutral-400' }}">
+                                            {{ number_format($bucket->used, 2) }}/{{ number_format($bucket->hours, 2) }}h
+                                        </span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 dark:bg-neutral-700 rounded-full h-2">
+                                        <div class="{{ $statusColor }} h-2 rounded-full transition-all duration-300"
+                                             style="width: {{ min($percentage, 100) }}%">
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        @endforeach
+                            @endforeach
+
+                            @if($depletedBuckets->isNotEmpty())
+                                <div class="border-t border-gray-200 dark:border-neutral-700 pt-3 mt-3">
+                                    <span class="text-xs font-medium text-red-500 dark:text-red-400 mb-2 block">Depleted Buckets</span>
+                                    @foreach($depletedBuckets as $bucket)
+                                        <div class="p-2 rounded-lg bg-red-50 dark:bg-red-950/20">
+                                            <div class="flex justify-between items-center text-sm mb-2">
+                                                <span class="font-medium text-gray-700 dark:text-neutral-300">
+                                                    {{ $bucket->identifier ?? "Bucket " . $bucket->sequence }}
+                                                    <span class="inline-flex items-center ml-2 px-1.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200">
+                                                        Depleted
+                                                    </span>
+                                                </span>
+                                                <span class="text-red-600 dark:text-red-400 font-semibold">
+                                                    {{ number_format($bucket->used, 2) }}/{{ number_format($bucket->hours, 2) }}h
+                                                </span>
+                                            </div>
+                                            <div class="w-full bg-gray-200 dark:bg-neutral-700 rounded-full h-2">
+                                                <div class="bg-red-500 h-2 rounded-full transition-all duration-300"
+                                                     style="width: 100%">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            @endif
+                        </div>
                     </div>
 
                     @if($client->total_budget > 0 && ($client->total_budget - $client->total_paid) < ($client->total_budget * 0.2))
