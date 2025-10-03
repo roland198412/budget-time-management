@@ -19,14 +19,12 @@
                                 <span class="font-medium text-gray-700 dark:text-neutral-300">
                                     Total Budget
                                     @php
-                                        $activeBucketCount = $client->buckets
-                                            ->sortBy('sequence')
-                                            ->pipe(fn($buckets) => \App\Helpers\BucketAllocator::allocate($buckets))
-                                            ->filter(fn($b) => $b->hours > 0 && ($b->used / $b->hours) < 100)
-                                            ->count();
+                                        $buckets = $client->buckets->sortBy('sequence');
+                                        $allocatedBuckets = \App\Helpers\BucketAllocator::allocate($buckets);
+                                        $activeBucketCount = $allocatedBuckets->filter(fn($b) => $b->hours > 0 && $b->used < $b->hours)->count();
                                     @endphp
                                     <span class="inline-flex items-center ml-2 px-1.5 py-0.5 rounded-full text-xs font-medium {{ $activeBucketCount > 0 ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200' : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200' }}">
-                                        {{ $activeBucketCount }} {{ __(' Bucket'.($activeBucketCount !== 1 ? 's' : '')) }}
+                                        {{ $activeBucketCount }} {{ __('Active Bucket'.($activeBucketCount !== 1 ? 's' : '')) }}
                                     </span>
                                 </span>
                                 <span class="text-gray-900 dark:text-neutral-100 font-semibold">
@@ -91,15 +89,15 @@
                                 @php
                                     $buckets = $client->buckets->sortBy('sequence');
                                     $allocatedBuckets = \App\Helpers\BucketAllocator::allocate($buckets);
-                                    $activeBucketCount = $allocatedBuckets->filter(fn($b) => $b->hours > 0 && ($b->used / $b->hours) < 100)->count();
-                                    $depletedBucketCount = $allocatedBuckets->filter(fn($b) => $b->hours > 0 && ($b->used / $b->hours) >= 100)->count();
+                                    $activeBucketCount = $allocatedBuckets->filter(fn($b) => $b->hours > 0 && $b->used < $b->hours)->count();
+                                    $depletedBucketCount = $allocatedBuckets->filter(fn($b) => $b->hours > 0 && $b->used >= $b->hours)->count();
                                 @endphp
                                 <span class="text-xs {{ $activeBucketCount > 0 ? 'text-gray-500 dark:text-neutral-400' : 'text-red-500 dark:text-red-400' }}">
                                     {{ $activeBucketCount }} {{ __('Active') }}
                                 </span>
-                                @if($client->buckets->filter(fn($b) => $b->hours > 0 && ($b->used / $b->hours) >= 100)->count() > 0)
+                                @if($depletedBucketCount > 0)
                                     <span class="text-xs text-red-500 dark:text-red-400">
-                                        {{ $client->buckets->filter(fn($b) => $b->hours > 0 && ($b->used / $b->hours) >= 100)->count() }} Depleted
+                                        {{ $depletedBucketCount }} {{ __('Depleted') }}
                                     </span>
                                 @endif
                             </div>
@@ -107,8 +105,8 @@
                         @php
                             $buckets = $client->buckets->sortBy('sequence');
                             $buckets = \App\Helpers\BucketAllocator::allocate($buckets)->sortByDesc('sequence');
-                            $activeBuckets = $buckets->filter(fn($b) => $b->hours > 0 && ($b->used / $b->hours) < 100);
-                            $depletedBuckets = $buckets->filter(fn($b) => $b->hours > 0 && ($b->used / $b->hours) >= 100);
+                            $activeBuckets = $buckets->filter(fn($b) => $b->hours > 0 && $b->used < $b->hours);
+                            $depletedBuckets = $buckets->filter(fn($b) => $b->hours > 0 && $b->used >= $b->hours);
                         @endphp
                         <div class="space-y-3">
                             @foreach($activeBuckets as $bucket)
