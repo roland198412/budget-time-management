@@ -132,6 +132,7 @@
                             @foreach($activeBuckets as $bucket)
                                 @php
                                     $percentage = ($bucket->used / $bucket->hours) * 100;
+                                    $remainingHours = $bucket->hours - $bucket->used;
                                     $statusColor = match(true) {
                                         $percentage >= 80 => 'bg-orange-500',
                                         $percentage >= 50 => 'bg-yellow-500',
@@ -140,14 +141,19 @@
                                 @endphp
                                 <div class="p-2 rounded-lg {{ $percentage >= 80 ? 'bg-red-50 dark:bg-red-950/20' : 'bg-gray-50 dark:bg-neutral-800/50' }}">
                                     <div class="flex justify-between items-center text-sm mb-2">
-                                        <span class="font-medium text-gray-700 dark:text-neutral-300">
-                                            {{ $bucket->identifier ?? "Bucket " . $bucket->sequence }}
-                                            @if($percentage >= 80)
-                                                <span class="inline-flex items-center ml-2 px-1.5 py-0.5 rounded-full text-xs font-medium {{ $percentage >= 100 ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200' : 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200' }}">
-                                                    {{ $percentage >= 100 ? 'Depleted' : 'Warning' }}
-                                                </span>
-                                            @endif
-                                        </span>
+                                        <div class="flex flex-col">
+                                            <span class="font-medium text-gray-700 dark:text-neutral-300">
+                                                {{ $bucket->identifier ?? "Bucket " . $bucket->sequence }}
+                                                @if($percentage >= 80)
+                                                    <span class="inline-flex items-center ml-2 px-1.5 py-0.5 rounded-full text-xs font-medium {{ $percentage >= 100 ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200' : 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200' }}">
+                                                        {{ $percentage >= 100 ? 'Depleted' : 'Warning' }}
+                                                    </span>
+                                                @endif
+                                            </span>
+                                            <span class="text-xs text-gray-500 dark:text-neutral-500">
+                                                {{ number_format($remainingHours, 2) }}h remaining
+                                            </span>
+                                        </div>
                                         <span class="{{ $percentage >= 80 ? 'text-red-600 dark:text-red-400 font-semibold' : 'text-gray-600 dark:text-neutral-400' }}">
                                             {{ number_format($bucket->used, 2) }}/{{ number_format($bucket->hours, 2) }}h
                                         </span>
@@ -164,14 +170,22 @@
                                 <div class="border-t border-gray-200 dark:border-neutral-700 pt-3 mt-3">
                                     <span class="text-xs font-medium text-red-500 dark:text-red-400 mb-2 block">Depleted Buckets</span>
                                     @foreach($depletedBuckets as $bucket)
+                                        @php
+                                            $remainingHours = $bucket->hours - $bucket->used;
+                                        @endphp
                                         <div class="p-2 rounded-lg bg-red-50 dark:bg-red-950/20">
                                             <div class="flex justify-between items-center text-sm mb-2">
-                                                <span class="font-medium text-gray-700 dark:text-neutral-300">
-                                                    {{ $bucket->identifier ?? "Bucket " . $bucket->sequence }}
-                                                    <span class="inline-flex items-center ml-2 px-1.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200">
-                                                        Depleted
+                                                <div class="flex flex-col">
+                                                    <span class="font-medium text-gray-700 dark:text-neutral-300">
+                                                        {{ $bucket->identifier ?? "Bucket " . $bucket->sequence }}
+                                                        <span class="inline-flex items-center ml-2 px-1.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200">
+                                                            Depleted
+                                                        </span>
                                                     </span>
-                                                </span>
+                                                    <span class="text-xs text-red-500 dark:text-red-500">
+                                                        {{ number_format(abs($remainingHours), 2) }}h over budget
+                                                    </span>
+                                                </div>
                                                 <span class="text-red-600 dark:text-red-400 font-semibold">
                                                     {{ number_format($bucket->used, 2) }}/{{ number_format($bucket->hours, 2) }}h
                                                 </span>
