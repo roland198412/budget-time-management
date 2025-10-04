@@ -3,7 +3,10 @@
 namespace App\Models;
 
 use App\Enums\PaymentType;
-use Illuminate\Database\Eloquent\{Model, SoftDeletes};
+use Illuminate\Database\Eloquent\{
+    Builder,
+    Model,
+    SoftDeletes};
 use Illuminate\Database\Eloquent\Relations\{BelongsTo, BelongsToMany};
 
 class ClockifyUserPayment extends Model
@@ -24,6 +27,13 @@ class ClockifyUserPayment extends Model
             'payment_date' => 'date',
             'payment_type' => PaymentType::class,
         ];
+    }
+
+    protected static function booted(): void
+    {
+        static::addGlobalScope('defaultOrdering', function (Builder $builder) {
+            $builder->orderByDesc('id');
+        });
     }
 
     public function clockifyUser(): BelongsTo
