@@ -1,6 +1,9 @@
 <section>
-    @include('partials.heading', ['heading' => __('Time Entries'), 'description' => __('Manage your time entries') ])
-    
+    @include('partials.heading', [
+        'heading' => $heading ?? __('Time Entries'),
+        'description' => __('Manage your time entries')
+    ])
+
     <div class="h-full w-full flex-1">
         @if (session()->has('message'))
             <div class="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded">
@@ -19,23 +22,30 @@
             </div>
             
             <!-- Filters Row -->
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <!-- Date From Filter -->
-{{--                <div>--}}
-{{--                    <flux:field>--}}
-{{--                        <flux:label>{{ __('From Date') }}</flux:label>--}}
-{{--                        <flux:input wire:model.live="dateFrom" type="date" placeholder="{{ __('Select start date') }}" />--}}
-{{--                    </flux:field>--}}
-{{--                </div>--}}
-{{--                --}}
-{{--                <!-- Date To Filter -->--}}
-{{--                <div>--}}
-{{--                    <flux:field>--}}
-{{--                        <flux:label>{{ __('To Date') }}</flux:label>--}}
-{{--                        <flux:input wire:model.live="dateTo" type="date" placeholder="{{ __('Select end date') }}" />--}}
-{{--                    </flux:field>--}}
-{{--                </div>--}}
-                
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <!-- Date Filter -->
+                <div>
+                    <flux:field>
+                        <flux:label>{{ __('Date Range') }}</flux:label>
+                        <flux:select wire:model.live="selectedDateFilter">
+                            <flux:select.option value="today">{{ __('Today') }}</flux:select.option>
+                            <flux:select.option value="yesterday">{{ __('Yesterday') }}</flux:select.option>
+                            <flux:select.option value="this_week">{{ __('This Week') }}</flux:select.option>
+                            <flux:select.option value="last_week">{{ __('Last Week') }}</flux:select.option>
+                            <flux:select.option value="this_month">{{ __('This Month') }}</flux:select.option>
+                            <flux:select.option value="last_month">{{ __('Last Month') }}</flux:select.option>
+                            <flux:select.option value="this_quarter">{{ __('This Quarter') }}</flux:select.option>
+                            <flux:select.option value="last_quarter">{{ __('Last Quarter') }}</flux:select.option>
+                            <flux:select.option value="this_year">{{ __('This Year') }}</flux:select.option>
+                            <flux:select.option value="last_year">{{ __('Last Year') }}</flux:select.option>
+                            <flux:select.option value="last_30_days">{{ __('Last 30 Days') }}</flux:select.option>
+                            <flux:select.option value="last_60_days">{{ __('Last 60 Days') }}</flux:select.option>
+                            <flux:select.option value="last_90_days">{{ __('Last 90 Days') }}</flux:select.option>
+                            <flux:select.option value="all">{{ __('All Time') }}</flux:select.option>
+                        </flux:select>
+                    </flux:field>
+                </div>
+
                 <!-- Project Filter -->
                 <div class="flex gap-4 *:gap-x-2">
                     <flux:checkbox.group wire:model.live="selectedProjects" label="Projects">
