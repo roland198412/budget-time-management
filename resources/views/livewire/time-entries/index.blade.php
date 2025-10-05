@@ -21,45 +21,37 @@
             <!-- Filters Row -->
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <!-- Date From Filter -->
-                <div>
-                    <flux:field>
-                        <flux:label>{{ __('From Date') }}</flux:label>
-                        <flux:input wire:model.live="dateFrom" type="date" placeholder="{{ __('Select start date') }}" />
-                    </flux:field>
-                </div>
-                
-                <!-- Date To Filter -->
-                <div>
-                    <flux:field>
-                        <flux:label>{{ __('To Date') }}</flux:label>
-                        <flux:input wire:model.live="dateTo" type="date" placeholder="{{ __('Select end date') }}" />
-                    </flux:field>
-                </div>
+{{--                <div>--}}
+{{--                    <flux:field>--}}
+{{--                        <flux:label>{{ __('From Date') }}</flux:label>--}}
+{{--                        <flux:input wire:model.live="dateFrom" type="date" placeholder="{{ __('Select start date') }}" />--}}
+{{--                    </flux:field>--}}
+{{--                </div>--}}
+{{--                --}}
+{{--                <!-- Date To Filter -->--}}
+{{--                <div>--}}
+{{--                    <flux:field>--}}
+{{--                        <flux:label>{{ __('To Date') }}</flux:label>--}}
+{{--                        <flux:input wire:model.live="dateTo" type="date" placeholder="{{ __('Select end date') }}" />--}}
+{{--                    </flux:field>--}}
+{{--                </div>--}}
                 
                 <!-- Project Filter -->
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('Projects') }}</label>
-                    <select wire:model.live="selectedProjects" 
-                            multiple 
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                <div class="flex gap-4 *:gap-x-2">
+                    <flux:checkbox.group wire:model.live="selectedProjects" label="Projects">
                         @foreach($projects as $project)
-                            <option value="{{ $project->clockify_project_id }}">
-                                {{ $project->name }}
-                            </option>
+                            <flux:checkbox label="{{ $project->name }}" value="{{ $project->clockify_project_id }}" checked />
                         @endforeach
-                    </select>
+                    </flux:checkbox.group>
                 </div>
                 
                 <!-- User Filter -->
                 <div>
-                    <flux:field>
-                        <flux:label>{{ __('Users') }}</flux:label>
-                        <flux:select wire:model.live="selectedUsers" multiple placeholder="{{ __('Choose users...') }}">
-                            @foreach($users as $user)
-                                <flux:select.option value="{{ $user->clockify_user_id }}">{{ $user->user_name }}</flux:select.option>
-                            @endforeach
-                        </flux:select>
-                    </flux:field>
+                    <flux:checkbox.group wire:model.live="selectedUsers" label="Users">
+                        @foreach($users as $user)
+                            <flux:checkbox label="{{ $user->user_name }}" value="{{ $user->clockify_user_id }}" checked />
+                        @endforeach
+                    </flux:checkbox.group>
                 </div>
             </div>
         </div>
