@@ -29,7 +29,10 @@
                         <span class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">{{ __('Payment Status') }}</span>
                     </th>
                     <th class="px-6 py-3 bg-gray-50 text-left border border-gray-100">
-                        <span class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">{{ __('Bucket Start Date') }}</span>
+                        <span class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                            <div>{{ __('Bucket Start Date') }}</div>
+                            <div class="text-xs text-gray-300 mt-1">({{ __('Invoice date') }})</div>
+                        </span>
                     </th>
                     <th class="px-6 py-3 bg-gray-50 text-left border border-gray-100">
                         <span class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">{{ __('Hours') }}</span>
