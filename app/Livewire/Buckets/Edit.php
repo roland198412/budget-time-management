@@ -3,6 +3,7 @@
 namespace App\Livewire\Buckets;
 
 use App\Models\{Bucket, Client};
+use App\Enums\PaymentStatus;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 
@@ -26,6 +27,9 @@ class Edit extends Component
     #[Validate('required|exists:clients,id')]
     public string $client_id = '';
 
+    #[Validate('required|in:paid,unpaid')]
+    public string $payment_status = 'unpaid';
+
     public Bucket $bucket;
 
     public function mount(Bucket $bucket): void
@@ -37,6 +41,7 @@ class Edit extends Component
         $this->hours = $bucket->hours;
         $this->sequence = $bucket->sequence;
         $this->client_id = $bucket->client_id;
+        $this->payment_status = $bucket->payment_status?->value ?? 'unpaid';
     }
 
     public function save(): void
@@ -50,6 +55,9 @@ class Edit extends Component
 
     public function render()
     {
-        return view('livewire.buckets.edit', ['clients' => Client::all()]);
+        return view('livewire.buckets.edit', [
+            'clients' => Client::all(),
+            'paymentStatuses' => PaymentStatus::cases(),
+        ]);
     }
 }

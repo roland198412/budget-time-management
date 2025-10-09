@@ -20,10 +20,13 @@
                         <span class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">{{ __('ID') }}</span>
                     </th>
                     <th class="px-6 py-3 bg-gray-50 text-left border border-gray-100">
+                        <span class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">{{ __('Client') }}</span>
+                    </th>
+                    <th class="px-6 py-3 bg-gray-50 text-left border border-gray-100">
                         <span class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">{{ __('Identifier') }}</span>
                     </th>
                     <th class="px-6 py-3 bg-gray-50 text-left border border-gray-100">
-                        <span class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">{{ __('Client') }}</span>
+                        <span class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">{{ __('Payment Status') }}</span>
                     </th>
                     <th class="px-6 py-3 bg-gray-50 text-left border border-gray-100">
                         <span class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">{{ __('Bucket Start Date') }}</span>
@@ -60,10 +63,16 @@
                             {{ $bucket->id }}
                         </td>
                         <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900 border border-gray-100 p-1">
-                            {{ $bucket->identifier }}
+                            {{ $bucket->client->name }}
                         </td>
                         <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900 border border-gray-100 p-1">
-                            {{ $bucket->client->name }}
+                            {{ $bucket->identifier }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-no-wrap text-xs leading-5 text-gray-900 border border-gray-100 p-1 text-center">
+                            <span class="px-2 py-0.5 rounded-full text-xs font-normal
+                                {{ $bucket->payment_status->value === 'paid' ? 'bg-green-200 text-green-900' : 'bg-red-200 text-red-900' }}">
+                                {{ $bucket->payment_status->label() }}
+                            </span>
                         </td>
                         <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900 border border-gray-100 p-1">
                             {{ $bucket->bucket_start_date }}

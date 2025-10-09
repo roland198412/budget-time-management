@@ -3,6 +3,7 @@
 namespace App\Livewire\Buckets;
 
 use App\Models\{Bucket, Client};
+use App\Enums\PaymentStatus;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 
@@ -26,6 +27,9 @@ class Create extends Component
     #[Validate('required|exists:clients,id')]
     public string $client_id = '';
 
+    #[Validate('required|in:paid,unpaid')]
+    public string $payment_status = 'unpaid';
+
     public function save(): void
     {
         $data = $this->validate();
@@ -37,6 +41,9 @@ class Create extends Component
 
     public function render()
     {
-        return view('livewire.buckets.create', ['clients' => Client::all()]);
+        return view('livewire.buckets.create', [
+            'clients' => Client::all(),
+            'paymentStatuses' => PaymentStatus::cases(),
+        ]);
     }
 }

@@ -16,6 +16,12 @@
         <flux:input wire:model="hours" :label="__('Available Hours')" type="number" step="1" min="0" />
         <flux:input wire:model="cost_per_hour" :label="__('Cost Per Hour')" type="number" step="0.01" min="0" />
 
+        <flux:select wire:model="payment_status" :label="__('Payment Status')" required>
+            @foreach($paymentStatuses as $status)
+                <option value="{{ $status->value }}">{{ $status->label() }}</option>
+            @endforeach
+        </flux:select>
+
         <div class="flex items-center gap-4">
             <div class="flex items-center justify-end">
                 <flux:button size="sm" variant="primary" type="submit" class="w-full">{{ __('Create') }}</flux:button>

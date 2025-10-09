@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\PaymentStatus;
 use Illuminate\Database\Eloquent\{
     Builder,
     Model,
@@ -18,7 +19,12 @@ class Bucket extends Model
         'cost_per_hour',
         'bucket_start_date',
         'identifier',
-        'client_id'
+        'client_id',
+        'payment_status', // Add payment_status to fillable
+    ];
+
+    protected $casts = [
+        'payment_status' => PaymentStatus::class, // Cast payment_status to enum
     ];
 
     protected static function booted(): void
