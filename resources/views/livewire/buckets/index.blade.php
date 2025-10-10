@@ -63,7 +63,7 @@
                 </thead>
 
                 <tbody class="bg-white divide-y divide-gray-200 divide-solid">
-                @foreach($buckets as $bucket)
+                @foreach($buckets->reverse() as $bucket)
                     <tr class="bg-white">
                         <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900 border border-gray-100 p-1">
                             {{ $bucket->id }}
