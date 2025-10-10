@@ -22,6 +22,8 @@
             @endforeach
         </flux:select>
 
+        <flux:input wire:model="payment_date" :label="__('Payment Date')" type="date" :description="__('Date the payment was made (optional)')" />
+
         <div class="flex items-center gap-4">
             <div class="flex items-center justify-end">
                 <flux:button size="sm" variant="primary" type="submit" class="w-full">{{ __('Update') }}</flux:button>

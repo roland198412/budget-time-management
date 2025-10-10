@@ -49,8 +49,7 @@ class TimeSheetNotification extends Notification
 
         $mailMessage = NotificationTemplate::find(1);
 
-
-            // If both are in the same month & year, avoid repetition
+        // If both are in the same month & year, avoid repetition
         if ($this->from->format('F Y') === $this->to->format('F Y')) {
             $dateRange = $this->from->day . ' tot ' . $this->to->day . ' ' . $this->to->translatedFormat('F Y');
         } else {
@@ -58,12 +57,12 @@ class TimeSheetNotification extends Notification
             $dateRange = $this->from->translatedFormat('d F Y') . ' tot ' . $this->to->translatedFormat('d F Y');
         }
 
-        $mailMessage->content = str_replace('{{bucket_available_hours}}',  BucketHelper::bucketRemainingHours($this->client) , $mailMessage->content);
-        $mailMessage->content = str_replace('{{week_date_range_afr}}', $dateRange , $mailMessage->content);
+        $mailMessage->content = str_replace('{{bucket_available_hours}}', BucketHelper::bucketRemainingHours($this->client), $mailMessage->content);
+        $mailMessage->content = str_replace('{{week_date_range_afr}}', $dateRange, $mailMessage->content);
 
         return (new MailMessage())
             ->greeting($greeting)
-            ->subject(str_replace('{{week_date_range_afr}}', $dateRange , $mailMessage->subject))
+            ->subject(str_replace('{{week_date_range_afr}}', $dateRange, $mailMessage->subject))
             ->line(new HtmlString(nl2br($mailMessage->content)))
             ->attachData($excelData, 'timesheet_report_' . $this->from->format('Y-m-d') . '_to_' . $this->to->format('Y-m-d') . '.xlsx', [
                 'mime' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',

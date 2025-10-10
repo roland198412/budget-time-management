@@ -30,6 +30,9 @@ class Edit extends Component
     #[Validate('required|in:paid,unpaid')]
     public string $payment_status = 'unpaid';
 
+    #[Validate('nullable|date')]
+    public $payment_date = null;
+
     public Bucket $bucket;
 
     public function mount(Bucket $bucket): void
@@ -42,6 +45,7 @@ class Edit extends Component
         $this->sequence = $bucket->sequence;
         $this->client_id = $bucket->client_id;
         $this->payment_status = $bucket->payment_status?->value ?? 'unpaid';
+        $this->payment_date = $bucket->payment_date?->format('Y-m-d');
     }
 
     public function save(): void

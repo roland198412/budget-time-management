@@ -30,6 +30,9 @@ class Create extends Component
     #[Validate('required|in:paid,unpaid')]
     public string $payment_status = 'unpaid';
 
+    #[Validate('nullable|date')]
+    public $payment_date = null;
+
     public function save(): void
     {
         $data = $this->validate();

@@ -29,6 +29,9 @@
                         <span class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">{{ __('Payment Status') }}</span>
                     </th>
                     <th class="px-6 py-3 bg-gray-50 text-left border border-gray-100">
+                        <span class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">{{ __('Payment Date') }}</span>
+                    </th>
+                    <th class="px-6 py-3 bg-gray-50 text-left border border-gray-100">
                         <span class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
                             <div>{{ __('Bucket Start Date') }}</div>
                             <div class="text-xs text-gray-300 mt-1">({{ __('Invoice date') }})</div>
@@ -76,6 +79,9 @@
                                 {{ $bucket->payment_status->value === 'paid' ? 'bg-green-200 text-green-900' : 'bg-red-200 text-red-900' }}">
                                 {{ $bucket->payment_status->label() }}
                             </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900 border border-gray-100 p-1">
+                            {{ substr($bucket->payment_date, 0, 10) }}
                         </td>
                         <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900 border border-gray-100 p-1">
                             {{ $bucket->bucket_start_date }}

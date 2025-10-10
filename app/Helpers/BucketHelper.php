@@ -13,6 +13,7 @@ class BucketHelper
      * to a client's buckets and the total bucket duration (converted from seconds to hours).
      *
      * @param Client $client The client whose bucket hours are being calculated.
+     *
      * @return string The remaining hours formatted as a string with two decimal places,
      *                using a comma as the decimal separator.
      */

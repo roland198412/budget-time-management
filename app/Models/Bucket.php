@@ -20,11 +20,13 @@ class Bucket extends Model
         'bucket_start_date',
         'identifier',
         'client_id',
-        'payment_status', // Add payment_status to fillable
+        'payment_status',
+        'payment_date', // Add payment_date to fillable
     ];
 
     protected $casts = [
         'payment_status' => PaymentStatus::class, // Cast payment_status to enum
+        'payment_date' => 'date', // Cast payment_date as date
     ];
 
     protected static function booted(): void
