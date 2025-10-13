@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\PaymentStatus;
 use Illuminate\Database\Eloquent\{
     Factories\HasFactory,
     Model,
@@ -57,7 +58,7 @@ class Client extends Model
 
     public function getTotalBudgetAttribute(): float
     {
-        return $this->buckets()->sum('hours') * $this->cost_per_hour;
+        return $this->buckets()->where('payment_status', PaymentStatus::PAID)->sum('hours') * $this->cost_per_hour;
     }
 
     public function getTotalPaidAttribute(): float
@@ -67,6 +68,19 @@ class Client extends Model
             ->join('clockify_user_payment_project', 'projects.id', '=', 'clockify_user_payment_project.project_id')
             ->join('clockify_user_payments', 'clockify_user_payment_project.clockify_user_payment_id', '=', 'clockify_user_payments.id')
             ->select('clockify_user_payments.id', 'clockify_user_payments.amount_ex_vat')
+            ->where('clockify_user_payments.payment_status', PaymentStatus::PAID)
+            ->distinct()
+            ->sum('clockify_user_payments.amount_ex_vat') ?? 0;
+    }
+
+    public function getTotalAmountOutstandingToDevelopersAttribute(): float
+    {
+        return $this->projects()
+            ->bucket()
+            ->join('clockify_user_payment_project', 'projects.id', '=', 'clockify_user_payment_project.project_id')
+            ->join('clockify_user_payments', 'clockify_user_payment_project.clockify_user_payment_id', '=', 'clockify_user_payments.id')
+            ->select('clockify_user_payments.id', 'clockify_user_payments.amount_ex_vat')
+            ->where('clockify_user_payments.payment_status', PaymentStatus::UNPAID)
             ->distinct()
             ->sum('clockify_user_payments.amount_ex_vat') ?? 0;
     }

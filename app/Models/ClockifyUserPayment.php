@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\PaymentType;
+use App\Enums\PaymentStatus;
 use Illuminate\Database\Eloquent\{
     Builder,
     Model,
@@ -19,6 +20,7 @@ class ClockifyUserPayment extends Model
         'vat_amount',
         'payment_date',
         'payment_type',
+        'payment_status',
     ];
 
     protected function casts(): array
@@ -26,6 +28,7 @@ class ClockifyUserPayment extends Model
         return [
             'payment_date' => 'date',
             'payment_type' => PaymentType::class,
+            'payment_status' => PaymentStatus::class,
         ];
     }
 

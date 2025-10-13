@@ -34,6 +34,9 @@
                         <span class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">{{ __('Created At') }}</span>
                     </th>
                     <th class="px-6 py-3 bg-gray-50 text-left border   border-gray-100">
+                        <span class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">{{ __('Payment Status') }}</span>
+                    </th>
+                    <th class="px-6 py-3 bg-gray-50 text-left border   border-gray-100">
                         <span class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">{{ __('Actions') }}</span>
                     </th>
                 </tr>
@@ -83,6 +86,12 @@
                         <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900 border   border-gray-100 p-1">
                             {{ $payment->created_at->format('d/m/Y H:i') }}
                         </td>
+                        <td class="px-6 py-4 whitespace-no-wrap text-xs leading-5 text-gray-900 border border-gray-100 p-1 text-center">
+                            <span class="px-2 py-0.5 rounded-full text-xs font-normal
+                                {{ $payment->payment_status->value === 'paid' ? 'bg-green-200 text-green-900' : 'bg-red-200 text-red-900' }}">
+                                {{ $payment->payment_status->label() }}
+                            </span>
+                        </td>
                         <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900 border  border-gray-100 p-1">
                             <flux:button size="xs" variant="primary" :href="route('clockify-user-payments.edit', $payment)">
                                 {{ __('Edit') }}
@@ -95,7 +104,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="9" class="px-6 py-4 text-center text-sm text-gray-500 border border-gray-100">
+                        <td colspan="10" class="px-6 py-4 text-center text-sm text-gray-500 border border-gray-100">
                             No payments found.
                         </td>
                     </tr>

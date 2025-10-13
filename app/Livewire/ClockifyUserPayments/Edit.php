@@ -2,6 +2,7 @@
 
 namespace App\Livewire\ClockifyUserPayments;
 
+use App\Enums\PaymentStatus;
 use App\Enums\PaymentType;
 use App\Models\{ClockifyUser, ClockifyUserPayment, Project};
 use Livewire\Attributes\Validate;
@@ -29,6 +30,9 @@ class Edit extends Component
     #[Validate('array')]
     public array $selectedProjects = [];
 
+    #[Validate('required')]
+    public $payment_status = '';
+
     public function mount(ClockifyUserPayment $payment): void
     {
         $this->payment = $payment;
@@ -38,6 +42,7 @@ class Edit extends Component
         $this->payment_date = $payment->payment_date->format('Y-m-d');
         $this->payment_type = $payment->payment_type?->value ?? '';
         $this->selectedProjects = $payment->projects->pluck('id')->toArray();
+        $this->payment_status = $payment->payment_status?->value ?? PaymentStatus::PAID->value;
     }
 
     public function save(): void
@@ -61,7 +66,8 @@ class Edit extends Component
         return view('livewire.clockify-user-payments.edit', [
             'users' => ClockifyUser::orderBy('name')->get(),
             'projects' => Project::orderBy('name')->get(),
-            'paymentTypes' => PaymentType::cases()
+            'paymentTypes' => PaymentType::cases(),
+            'paymentStatuses' => PaymentStatus::cases(),
         ]);
     }
 }

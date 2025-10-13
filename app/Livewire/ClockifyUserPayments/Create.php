@@ -2,6 +2,7 @@
 
 namespace App\Livewire\ClockifyUserPayments;
 
+use App\Enums\PaymentStatus;
 use App\Enums\PaymentType;
 use App\Models\{ClockifyUser, ClockifyUserPayment, Project};
 use Livewire\Attributes\Validate;
@@ -24,8 +25,16 @@ class Create extends Component
     #[Validate('required')]
     public $payment_type = '';
 
+    #[Validate('required')]
+    public $payment_status = '';
+
     #[Validate('array')]
     public array $selectedProjects = [];
+
+    public function mount(): void
+    {
+        $this->payment_status = PaymentStatus::PAID->value;
+    }
 
     public function save(): void
     {
@@ -50,7 +59,8 @@ class Create extends Component
         return view('livewire.clockify-user-payments.create', [
             'users' => ClockifyUser::orderBy('name')->get(),
             'projects' => Project::orderBy('name')->get(),
-            'paymentTypes' => PaymentType::cases()
+            'paymentTypes' => PaymentType::cases(),
+            'paymentStatuses' => PaymentStatus::cases(),
         ]);
     }
 }

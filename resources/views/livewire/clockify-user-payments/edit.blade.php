@@ -24,6 +24,15 @@
             </flux:select>
         </flux:field>
 
+        <flux:field>
+            <flux:label>{{ __('Payment Status') }}</flux:label>
+            <flux:select wire:model="payment_status" placeholder="{{ __('Choose payment status...') }}" required>
+                @foreach($paymentStatuses as $status)
+                    <flux:select.option value="{{ $status->value }}">{{ $status->value }}</flux:select.option>
+                @endforeach
+            </flux:select>
+        </flux:field>
+
         <div class="space-y-2">
             <flux:label>{{ __('Projects') }}</flux:label>
             <div class="space-y-2 max-h-48 overflow-y-auto border border-gray-300 rounded-lg p-3">

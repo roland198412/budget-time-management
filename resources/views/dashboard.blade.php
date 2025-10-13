@@ -58,6 +58,21 @@
                             </div>
                         </div>
 
+                        <div class="p-2 rounded-lg bg-gray-50 dark:bg-neutral-800/50">
+                            <div class="flex justify-between items-center text-sm mb-2">
+                                <span class="font-medium text-gray-700 dark:text-neutral-300">
+                                    Amount Owed to Developers
+                                </span>
+                                <span class="{{ $client->total_amount_outstanding_to_developers > 0 ? 'text-red-600 dark:text-red-400 font-semibold' : 'text-gray-900 dark:text-neutral-100' }}">
+                                    R {{ number_format($client->total_amount_outstanding_to_developers, 2) }}
+                                </span>
+                            </div>
+                            <div class="w-full bg-gray-200 dark:bg-neutral-700 rounded-full h-2">
+                                <div class="{{ $client->total_amount_outstanding_to_developers > 0 ? 'bg-red-500' : 'bg-gray-200' }} h-2 rounded-full transition-all duration-300" style="width: @if($client->total_amount_outstanding_to_developers > 0){{ min(($client->total_paid / $client->total_budget) * 100, 100) }}@else 0 @endif%">
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Available Balance Bar -->
                         <div class="p-2 rounded-lg {{ ($client->total_budget - $client->total_paid) < ($client->total_budget * 0.2) ? 'bg-red-50 dark:bg-red-950/20' : 'bg-gray-50 dark:bg-neutral-800/50' }}">
                             <div class="flex justify-between items-center text-sm mb-2">
