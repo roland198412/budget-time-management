@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use App\Enums\PaymentStatus;
 use App\Models\Client;
 
 class BucketHelper
@@ -20,7 +21,7 @@ class BucketHelper
     public static function bucketRemainingHours(Client $client): string
     {
         // Retrieve the buckets associated with the client
-        $buckets = $client->buckets;
+        $buckets = $client->buckets->where('payment_status', PaymentStatus::PAID);
 
         // Calculate the total hours from all buckets
         $totalHours = $buckets->sum('hours');

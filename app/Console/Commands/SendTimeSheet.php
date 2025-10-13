@@ -14,12 +14,13 @@ class SendTimeSheet extends Command
     /**
      * The name and signature of the console command.
      *
-     * Added optional parameters: start, end, weekly, and client
+     * Added optional parameters: start, end, weekly, lastweek, and client
      */
     protected $signature = 'app:send-time-sheet 
                             {--start= : Start date (YYYY-MM-DD) for custom range} 
                             {--end= : End date (YYYY-MM-DD) for custom range} 
                             {--weekly : Force sending weekly report} 
+                            {--lastweek : Send report for last week (Monday to Sunday)} 
                             {--bucket : Only show time entries for Bucket type projects} 
                             {--client= : Client ID to filter timesheets}';
 
@@ -30,6 +31,7 @@ class SendTimeSheet extends Command
         $startDate = $this->option('start');
         $endDate = $this->option('end');
         $isWeekly = $this->option('weekly');
+        $isLastWeek = $this->option('lastweek');
         $clientId = $this->option('client');
         $bucketProjectsOnly = $this->option('bucket');
 
@@ -40,7 +42,11 @@ class SendTimeSheet extends Command
         }
 
         // Determine date range
-        if ($isWeekly || (!$startDate && !$endDate)) {
+        if ($isLastWeek) {
+            $start = Carbon::now()->subWeek()->startOfWeek();
+            $end = Carbon::now()->subWeek()->endOfWeek();
+            $this->info("Generating timesheet for last week: {$start->toDateString()} - {$end->toDateString()}");
+        } elseif ($isWeekly || (!$startDate && !$endDate)) {
             $start = Carbon::now()->startOfWeek();
             $end = Carbon::now()->endOfWeek();
             $this->info("Generating weekly timesheet: {$start->toDateString()} - {$end->toDateString()}");
@@ -49,7 +55,7 @@ class SendTimeSheet extends Command
             $end = Carbon::parse($endDate)->endOfDay();
             $this->info("Generating timesheet for custom range: {$start->toDateString()} - {$end->toDateString()}");
         } else {
-            $this->error('You must provide both --start and --end for a custom range or use --weekly for weekly report.');
+            $this->error('You must provide both --start and --end for a custom range or use --weekly or --lastweek for a report.');
 
             return 1;
         }
