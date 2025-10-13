@@ -2,8 +2,7 @@
 
 namespace App\Models;
 
-use App\Enums\PaymentType;
-use App\Enums\PaymentStatus;
+use App\Enums\{PaymentStatus, PaymentType};
 use Illuminate\Database\Eloquent\{
     Builder,
     Model,

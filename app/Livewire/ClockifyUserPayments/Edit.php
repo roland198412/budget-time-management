@@ -2,8 +2,7 @@
 
 namespace App\Livewire\ClockifyUserPayments;
 
-use App\Enums\PaymentStatus;
-use App\Enums\PaymentType;
+use App\Enums\{PaymentStatus, PaymentType};
 use App\Models\{ClockifyUser, ClockifyUserPayment, Project};
 use Livewire\Attributes\Validate;
 use Livewire\Component;
