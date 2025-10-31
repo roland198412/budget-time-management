@@ -182,7 +182,8 @@ class Index extends Component
             ->get()
             ->map(function ($item) {
                 $hours = $item->total_duration / 3600;
-                $item->total_hours_decimal = number_format($hours, 2, ',', '');
+                $item->total_hours_numeric = round($hours, 2); // Numeric value for calculations
+                $item->total_hours_decimal = number_format($hours, 2, ',', ''); // Formatted for display
 
                 return $item;
             });

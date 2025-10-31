@@ -173,14 +173,24 @@
                                     <div class="w-4 h-4 rounded mr-2" style="background-color: {{ $projectTotal->project_color }}"></div>
                                 @endif
                                 <span class="text-sm font-medium text-gray-900 truncate">
-                                    {{ $projectTotal->project_name ?? 'Unknown Project' }}
-                                </span>
+                        {{ $projectTotal->project_name ?? 'Unknown Project' }}
+                    </span>
                             </div>
                             <div class="text-2xl font-bold text-blue-600">
                                 {{ $projectTotal->total_hours_decimal }}h
                             </div>
                         </div>
                     @endforeach
+                </div>
+
+                <!-- Total Hours Display -->
+                <div class="mt-4 pt-4 border-t border-gray-300">
+                    <div class="bg-gradient-to-br from-blue-50 to-blue-100 border-2 border-blue-300 rounded-lg p-4 max-w-xs">
+                        <div class="text-sm font-medium text-gray-600 mb-1">{{ __('Total Hours') }}</div>
+                        <div class="text-4xl font-bold text-blue-600">
+                            {{ number_format($projectTotals->sum('total_hours_numeric'), 2, ',', '') }}h
+                        </div>
+                    </div>
                 </div>
             </div>
         @endif

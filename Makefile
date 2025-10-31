@@ -26,3 +26,5 @@ shell: ## Create a shell into the application container
 	[ -f sail ] && bash sail || bash vendor/bin/sail bash
 tink: ## Laravel tinker
 	[ -f sail ] && bash sail || bash vendor/bin/sail tinker
+dev:
+	npm run dev
