@@ -109,7 +109,7 @@ class ClockifyService
      *
      * @throws \Exception If the API request fails or does not return a successful response.
      */
-    public function getDetailedReport(Client $client, int $page = 1, int $pageSize = 50): array
+    public function getDetailedReport(Client $client, int $page = 1, int $pageSize = 500): array
     {
         $url = "https://reports.api.clockify.me/v1/workspaces/{$client->clockify_workspace_id}/reports/detailed";
 
