@@ -48,6 +48,13 @@ class Edit extends Component
         $this->payment_status = $payment->payment_status?->value ?? PaymentStatus::PAID->value;
     }
 
+    public function getBalanceDueProperty(): float
+    {
+        $amount = is_numeric($this->amount_ex_vat) ? (float) $this->amount_ex_vat : 0;
+        $partial = is_numeric($this->partial_payment) ? (float) $this->partial_payment : 0;
+        return max($amount - $partial, 0);
+    }
+
     public function save(): void
     {
         $data = $this->validate();

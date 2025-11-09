@@ -14,6 +14,22 @@
         <flux:input wire:model="amount_ex_vat" :label="__('Amount Ex VAT')" type="number" step="0.01" min="0" required />
         <flux:input wire:model="vat_amount" :label="__('VAT Amount')" type="number" step="0.01" min="0" required />
         <flux:input wire:model="partial_payment" :label="__('Partial Payment')" type="number" step="0.01" min="0" />
+
+        @if($payment->payment_status->value !== 'paid')
+        <div class="p-4 rounded-lg {{ $this->balanceDue > 0 ? 'bg-red-50 border border-red-200' : 'bg-green-50 border border-green-200' }}">
+            <div class="flex justify-between items-center">
+                <span class="text-sm font-medium {{ $this->balanceDue > 0 ? 'text-red-700' : 'text-green-700' }}">
+                    {{ __('Balance Due') }}  R {{ number_format($this->balanceDue, 2) }}
+                </span>
+            </div>
+            @if($this->balanceDue > 0)
+                <p class="text-xs text-red-600 mt-1">{{ __('Outstanding amount after partial payment') }}</p>
+            @else
+                <p class="text-xs text-green-600 mt-1">{{ __('Payment fully covered') }}</p>
+            @endif
+        </div>
+        @endif
+
         <flux:input wire:model="payment_date" :label="__('Payment Date')" type="date" required />
 
         <flux:field>
