@@ -63,25 +63,41 @@ class Client extends Model
 
     public function getTotalPaidAttribute(): float
     {
-        return $this->projects()
+        // Get all payments related to this client's bucket projects
+        $payments = $this->projects()
             ->bucket()
             ->join('clockify_user_payment_project', 'projects.id', '=', 'clockify_user_payment_project.project_id')
             ->join('clockify_user_payments', 'clockify_user_payment_project.clockify_user_payment_id', '=', 'clockify_user_payments.id')
-            ->select('clockify_user_payments.id', 'clockify_user_payments.amount_ex_vat')
-            ->where('clockify_user_payments.payment_status', PaymentStatus::PAID)
+            ->select('clockify_user_payments.id', 'clockify_user_payments.amount_ex_vat', 'clockify_user_payments.partial_payment', 'clockify_user_payments.payment_status')
             ->distinct()
-            ->sum('clockify_user_payments.amount_ex_vat') ?? 0;
+            ->get();
+
+        $totalPaid = $payments->sum(function ($payment) {
+            // If status is PAID, include full amount + any partial payment
+            if ($payment->payment_status === PaymentStatus::PAID->value) {
+                return $payment->amount_ex_vat + ($payment->partial_payment ?? 0);
+            }
+            // If status is UNPAID, only include the partial payment (money already paid)
+            return $payment->partial_payment ?? 0;
+        });
+
+        return $totalPaid ?? 0;
     }
 
     public function getTotalAmountOutstandingToDevelopersAttribute(): float
     {
-        return $this->projects()
+        $totalOutstanding = $this->projects()
             ->bucket()
             ->join('clockify_user_payment_project', 'projects.id', '=', 'clockify_user_payment_project.project_id')
             ->join('clockify_user_payments', 'clockify_user_payment_project.clockify_user_payment_id', '=', 'clockify_user_payments.id')
-            ->select('clockify_user_payments.id', 'clockify_user_payments.amount_ex_vat')
+            ->select('clockify_user_payments.id', 'clockify_user_payments.amount_ex_vat', 'clockify_user_payments.partial_payment')
             ->where('clockify_user_payments.payment_status', PaymentStatus::UNPAID)
             ->distinct()
-            ->sum('clockify_user_payments.amount_ex_vat') ?? 0;
+            ->get()
+            ->sum(function ($payment) {
+                return ($payment->amount_ex_vat - ($payment->partial_payment ?? 0));
+            });
+
+        return max($totalOutstanding ?? 0, 0);
     }
 }

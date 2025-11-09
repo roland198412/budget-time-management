@@ -13,6 +13,7 @@
         
         <flux:input wire:model="amount_ex_vat" :label="__('Amount Ex VAT')" type="number" step="0.01" min="0" required />
         <flux:input wire:model="vat_amount" :label="__('VAT Amount')" type="number" step="0.01" min="0" required />
+        <flux:input wire:model="partial_payment" :label="__('Partial Payment')" type="number" step="0.01" min="0" />
         <flux:input wire:model="payment_date" :label="__('Payment Date')" type="date" required />
 
         <flux:field>

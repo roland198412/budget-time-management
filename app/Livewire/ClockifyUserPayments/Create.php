@@ -18,6 +18,9 @@ class Create extends Component
     #[Validate('required|numeric|min:0')]
     public $vat_amount = '';
 
+    #[Validate('nullable|numeric|min:0')]
+    public $partial_payment = '';
+
     #[Validate('required|date')]
     public $payment_date = '';
 

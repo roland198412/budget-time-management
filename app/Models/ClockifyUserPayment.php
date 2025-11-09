@@ -17,6 +17,7 @@ class ClockifyUserPayment extends Model
         'clockify_user_id',
         'amount_ex_vat',
         'vat_amount',
+        'partial_payment',
         'payment_date',
         'payment_type',
         'payment_status',

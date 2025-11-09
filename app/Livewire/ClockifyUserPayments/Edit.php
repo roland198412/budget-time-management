@@ -20,6 +20,9 @@ class Edit extends Component
     #[Validate('required|numeric|min:0')]
     public $vat_amount = '';
 
+    #[Validate('nullable|numeric|min:0')]
+    public $partial_payment = '';
+
     #[Validate('required|date')]
     public $payment_date = '';
 
@@ -38,6 +41,7 @@ class Edit extends Component
         $this->clockify_user_id = $payment->clockify_user_id;
         $this->amount_ex_vat = $payment->amount_ex_vat;
         $this->vat_amount = $payment->vat_amount;
+        $this->partial_payment = $payment->partial_payment ?? '';
         $this->payment_date = $payment->payment_date->format('Y-m-d');
         $this->payment_type = $payment->payment_type?->value ?? '';
         $this->selectedProjects = $payment->projects->pluck('id')->toArray();
