@@ -17,7 +17,11 @@ class Index extends Component
     public $selectedProjects = [];
     public $selectedUsers = [];
 
-    protected $queryString = ['search', 'sortBy', 'sortDirection', 'selectedDateFilter', 'selectedProjects', 'selectedUsers'];
+    // Custom date range properties
+    public $fromDate = null;
+    public $toDate = null;
+
+    protected $queryString = ['search', 'sortBy', 'sortDirection', 'selectedDateFilter', 'selectedProjects', 'selectedUsers', 'fromDate', 'toDate'];
 
     public function updatedSearch()
     {
@@ -26,6 +30,27 @@ class Index extends Component
 
     public function updatedSelectedDateFilter()
     {
+        // Clear custom range when selecting a preset
+        if ($this->selectedDateFilter !== 'custom') {
+            $this->fromDate = null;
+            $this->toDate = null;
+        }
+        $this->resetPage();
+    }
+
+    public function applyCustomRange(): void
+    {
+        if ($this->fromDate && $this->toDate) {
+            $this->selectedDateFilter = 'custom';
+            $this->resetPage();
+        }
+    }
+
+    public function clearCustomRange(): void
+    {
+        $this->fromDate = null;
+        $this->toDate = null;
+        $this->selectedDateFilter = 'all';
         $this->resetPage();
     }
 
@@ -59,6 +84,14 @@ class Index extends Component
 
     protected function getDateRange(): ?array
     {
+        // Handle custom date range first
+        if ($this->selectedDateFilter === 'custom' && $this->fromDate && $this->toDate) {
+            return [
+                'start' => Carbon::parse($this->fromDate)->startOfDay(),
+                'end' => Carbon::parse($this->toDate)->endOfDay(),
+            ];
+        }
+
         return match($this->selectedDateFilter) {
             'today' => [
                 'start' => Carbon::today(),
@@ -112,6 +145,7 @@ class Index extends Component
                 'start' => Carbon::now()->subDays(90)->startOfDay(),
                 'end' => Carbon::now()->endOfDay(),
             ],
+            'custom' => null, // Custom range is handled above
             default => null,
         };
     }
@@ -135,6 +169,7 @@ class Index extends Component
             'last_30_days' => __('Last 30 Days'),
             'last_60_days' => __('Last 60 Days'),
             'last_90_days' => __('Last 90 Days'),
+            'custom' => __('Custom Range'),
             default => __('All Time'),
         };
 

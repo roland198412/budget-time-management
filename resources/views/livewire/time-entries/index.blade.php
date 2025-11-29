@@ -42,6 +42,7 @@
                             <flux:select.option value="last_60_days">{{ __('Last 60 Days') }}</flux:select.option>
                             <flux:select.option value="last_90_days">{{ __('Last 90 Days') }}</flux:select.option>
                             <flux:select.option value="all">{{ __('All Time') }}</flux:select.option>
+                            <flux:select.option value="custom">{{ __('Custom Range') }}</flux:select.option>
                         </flux:select>
                     </flux:field>
                 </div>
@@ -50,7 +51,7 @@
                 <div class="flex gap-4 *:gap-x-2">
                     <flux:checkbox.group wire:model.live="selectedProjects" label="Projects">
                         @foreach($projects as $project)
-                            <flux:checkbox label="{{ $project->name }}" value="{{ $project->clockify_project_id }}" checked />
+                            <flux:checkbox label="{{ $project->name }}" value="{{ $project->clockify_project_id }}" />
                         @endforeach
                     </flux:checkbox.group>
                 </div>
@@ -59,9 +60,40 @@
                 <div>
                     <flux:checkbox.group wire:model.live="selectedUsers" label="Users">
                         @foreach($users as $user)
-                            <flux:checkbox label="{{ $user->user_name }}" value="{{ $user->clockify_user_id }}" checked />
+                            <flux:checkbox label="{{ $user->user_name }}" value="{{ $user->clockify_user_id }}" />
                         @endforeach
                     </flux:checkbox.group>
+                </div>
+            </div>
+
+            <!-- Custom From / To Date Range -->
+            <div class="mt-3 grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+                <div>
+                    <flux:field>
+                        <flux:label>{{ __('From') }}</flux:label>
+                        <input wire:model.live="fromDate" type="date" class="w-full px-3 py-2 border rounded" />
+                    </flux:field>
+                </div>
+
+                <div>
+                    <flux:field>
+                        <flux:label>{{ __('To') }}</flux:label>
+                        <input wire:model.live="toDate" type="date" class="w-full px-3 py-2 border rounded" />
+                    </flux:field>
+                </div>
+
+                <div class="flex gap-2">
+                    @if(empty($this->fromDate) || empty($this->toDate))
+                        <flux:button size="sm" variant="primary" class="opacity-50 pointer-events-none" aria-disabled="true">
+                            {{ __('Apply') }}
+                        </flux:button>
+                    @else
+                        <flux:button size="sm" variant="primary" wire:click="applyCustomRange">
+                            {{ __('Apply') }}
+                        </flux:button>
+                    @endif
+
+
                 </div>
             </div>
         </div>
