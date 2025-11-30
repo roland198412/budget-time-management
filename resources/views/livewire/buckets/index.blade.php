@@ -115,6 +115,23 @@
                         </td>
                     </tr>
                 @endforeach
+
+                <!-- Totals Row -->
+                <tr class="bg-gray-100 font-semibold border-t-2 border-gray-400">
+                    <td colspan="6" class="px-6 py-4 text-right text-sm text-gray-900 border border-gray-100">
+                        {{ __('Totals:') }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900 border border-gray-100 p-1">
+                        {{ number_format($buckets->sum('hours'), 2) }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900 border border-gray-100 p-1">
+                        {{ number_format($buckets->sum('used'), 2) }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900 border border-gray-100 p-1">
+                        {{ number_format($buckets->sum('hours') - $buckets->sum('used'), 2) }}
+                    </td>
+                    <td colspan="4" class="px-6 py-4 border border-gray-100"></td>
+                </tr>
                 </tbody>
             </table>
         </div>
