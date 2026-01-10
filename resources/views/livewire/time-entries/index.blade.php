@@ -220,7 +220,7 @@
                     <div class="bg-gradient-to-br from-blue-50 to-blue-100 border-2 border-blue-300 rounded-lg p-4 max-w-xs">
                         <div class="text-sm font-medium text-gray-600 mb-1">{{ __('Total Hours') }}</div>
                         <div class="text-4xl font-bold text-blue-600">
-                            {{ number_format($projectTotals->sum('total_hours_numeric'), 2, ',', '') }}h
+                            {{ number_format(floor($projectTotals->sum('total_hours_numeric') * 100) / 100, 2, ',', '') }}h
                         </div>
                     </div>
                 </div>
