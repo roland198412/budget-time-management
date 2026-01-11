@@ -5,6 +5,7 @@ namespace App\Livewire\NotificationTemplates;
 use App\Enums\{NotificationChannel, NotificationTemplateType};
 use App\Models\{Client, NotificationTemplate};
 use Illuminate\Validation\Rules\Enum;
+use Illuminate\Validation\Rule;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 
@@ -28,8 +29,6 @@ class Edit extends Component
     #[Validate('required|string|min:20')]
     public string $available_placeholders = '';
 
-    #[Validate('nullable')]
-    #[Validate(new Enum(NotificationTemplateType::class))]
     public ?string $template_type = null;
 
     public NotificationTemplate $notificationTemplate;
@@ -44,6 +43,19 @@ class Edit extends Component
         $this->content = $notificationTemplate->content;
         $this->available_placeholders = $notificationTemplate->available_placeholders;
         $this->template_type = $notificationTemplate->template_type?->value;
+    }
+
+    public function rules(): array
+    {
+        return [
+            'identifier' => ['required', 'string', 'max:255', Rule::unique('notification_templates')->ignore($this->notificationTemplate->id)],
+            'client_id' => ['required', 'exists:clients,id'],
+            'template_type' => ['nullable', Rule::enum(NotificationTemplateType::class)],
+            'subject' => ['nullable', 'string'],
+            'channel' => ['required', 'string'],
+            'content' => ['required', 'string'],
+            'available_placeholders' => ['nullable', 'json'],
+        ];
     }
 
     public function save(): void

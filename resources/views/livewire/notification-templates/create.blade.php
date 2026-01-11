@@ -14,7 +14,7 @@
         <flux:select wire:model="template_type" :label="__('Template Type')">
             <option value="">{{ __('Select a template type') }}</option>
             @foreach($templateTypes as $type)
-                <option value="{{ $type->value }}">{{ $type->label() }}</option>
+                <option value="{{ $type->value }}">{{ $type->name }}</option>
             @endforeach
         </flux:select>
 

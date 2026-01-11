@@ -9,3 +9,5 @@ Artisan::command('inspire', function () {
 
 
 \Illuminate\Support\Facades\Schedule::command('clockify:populate-detailed-report')->everyFifteenMinutes();
+
+\Illuminate\Support\Facades\Schedule::command('app:send-time-sheet --weekly --bucket --lastweek')->mondays()->at('07:00');

@@ -67,6 +67,13 @@ class TimeSheetNotification extends Notification
             ->where('client_id', $this->client->id)
             ->first();
 
+        if (!$notificationTemplate) {
+            throw new \RuntimeException(
+                "Notification template with identifier 'timesheet' not found for client '{$this->client->name}' (ID: {$this->client->id}). " .
+                "Please create a notification template with identifier 'timesheet' for this client."
+            );
+        }
+
         // If both are in the same month & year, avoid repetition
         if ($this->startDate->format('F Y') === $this->endDate->format('F Y')) {
             $dateRange = $this->startDate->day . ' tot ' . $this->endDate->day . ' ' . $this->endDate->translatedFormat('F Y');

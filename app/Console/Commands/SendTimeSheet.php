@@ -24,7 +24,7 @@ class SendTimeSheet extends Command
                             {--bucket : Only show time entries for Bucket type projects} 
                             {--client= : Client ID to filter timesheets}';
 
-    protected $description = 'Send weekly or custom timesheet to users filtered by client';
+    protected $description = 'Send weekly or custom timesheet to users filtered by client (or all clients if not specified)';
 
     public function handle()
     {
@@ -34,12 +34,6 @@ class SendTimeSheet extends Command
         $isLastWeek = $this->option('lastweek');
         $clientId = $this->option('client');
         $bucketProjectsOnly = $this->option('bucket');
-
-        if (!$clientId) {
-            $this->error('You must provide a --client ID.');
-
-            return 1;
-        }
 
         // Determine date range
         if ($isLastWeek) {
@@ -60,28 +54,34 @@ class SendTimeSheet extends Command
             return 1;
         }
 
-        $client = Client::find($clientId);
+        // Get clients to process
+        $clients = $clientId ? Client::where('id', $clientId)->get() : Client::all();
 
-        if (!$client) {
-            $this->error('Client not found.');
-
-            return 1;
-        }
-
-        $contacts = $client->contacts;
-        $emails = $contacts->pluck('email')->toArray();
-        $names = $contacts->pluck('firstname')->toArray();
-
-        if (empty($emails)) {
-            $this->error('No contacts found for this client.');
+        if ($clients->isEmpty()) {
+            $this->error('No clients found.');
 
             return 1;
         }
 
-        Notification::route('mail', $emails)
-            ->notify(new TimeSheetNotification($start, $end, $client, $bucketProjectsOnly, $names));
+        $this->info("Processing " . $clients->count() . " client(s)...");
 
-        $this->info("Timesheet sent successfully to all contacts for client ID {$clientId}!");
+        foreach ($clients as $client) {
+            $contacts = $client->contacts;
+            $emails = $contacts->pluck('email')->toArray();
+            $names = $contacts->pluck('firstname')->toArray();
+
+            if (empty($emails)) {
+                $this->warn("No contacts found for client ID {$client->id} ({$client->name}). Skipping...");
+                continue;
+            }
+
+            Notification::route('mail', $emails)
+                ->notify(new TimeSheetNotification($start, $end, $client, $bucketProjectsOnly, $names));
+
+            $this->info("Timesheet sent successfully to all contacts for client ID {$client->id} ({$client->name})");
+        }
+
+        $this->info("All timesheets sent successfully!");
 
         return 0;
     }
