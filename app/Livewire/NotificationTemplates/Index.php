@@ -16,6 +16,8 @@ class Index extends Component
 
     public function render(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\View\View
     {
-        return view('livewire.notification-templates.index', ['notificationTemplates' => NotificationTemplate::paginate(15)]);
+        return view('livewire.notification-templates.index', [
+            'notificationTemplates' => NotificationTemplate::with('client')->paginate(15)
+        ]);
     }
 }

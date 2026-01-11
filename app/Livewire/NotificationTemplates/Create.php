@@ -2,7 +2,7 @@
 
 namespace App\Livewire\NotificationTemplates;
 
-use App\Enums\NotificationChannel;
+use App\Enums\{NotificationChannel, NotificationTemplateType};
 use App\Models\{Client, NotificationTemplate};
 use Illuminate\Validation\Rules\Enum;
 use Livewire\Attributes\Validate;
@@ -28,6 +28,10 @@ class Create extends Component
     #[Validate('required|string|min:20')]
     public string $available_placeholders = '';
 
+    #[Validate('nullable')]
+    #[Validate(new Enum(NotificationTemplateType::class))]
+    public ?string $template_type = null;
+
     public function save(): void
     {
         $data = $this->validate();
@@ -39,6 +43,9 @@ class Create extends Component
 
     public function render()
     {
-        return view('livewire.notification-templates.create', ['clients' => Client::all()]);
+        return view('livewire.notification-templates.create', [
+            'clients' => Client::all(),
+            'templateTypes' => NotificationTemplateType::cases(),
+        ]);
     }
 }

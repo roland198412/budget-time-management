@@ -11,6 +11,13 @@
             @endforeach
         </flux:select>
 
+        <flux:select wire:model="template_type" :label="__('Template Type')">
+            <option value="">{{ __('Select a template type') }}</option>
+            @foreach($templateTypes as $type)
+                <option value="{{ $type->value }}">{{ $type->label() }}</option>
+            @endforeach
+        </flux:select>
+
         <flux:input wire:model="subject" :label="__('Subject Line')" type="subject" />
 
         <flux:select wire:model="channel" :label="__('Notification Channel')" required>
