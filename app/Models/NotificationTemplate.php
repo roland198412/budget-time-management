@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Enums\NotificationChannel;
+use App\Enums\{NotificationChannel, NotificationTemplateType};
 use Illuminate\Database\Eloquent\{Model, SoftDeletes};
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -16,11 +16,13 @@ class NotificationTemplate extends Model
         'subject',
         'client_id',
         'identifier',
-        'available_placeholders'
+        'available_placeholders',
+        'template_type'
     ];
 
     protected $casts = [
         'channel' => NotificationChannel::class,
+        'template_type' => NotificationTemplateType::class,
     ];
 
     public function client(): BelongsTo

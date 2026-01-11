@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Enums\NotificationTemplateType;
 use App\Exports\TimeSheetExport;
 use App\Helpers\BucketHelper;
 use App\Models\{Client, NotificationTemplate};
@@ -21,8 +22,13 @@ class TimeSheetNotification extends Notification
     /**
      * Create a new notification instance.
      */
-    public function __construct(private Carbon $from, private Carbon $to, private Client $client, private bool $bucketProjectsOnly = false, array $contactNames = [])
-    {
+    public function __construct(
+        private Carbon $startDate,
+        private Carbon $endDate,
+        private Client $client,
+        private bool $bucketProjectsOnly = false,
+        array $contactNames = []
+    ) {
         $this->contactNames = $contactNames;
     }
 
@@ -45,28 +51,47 @@ class TimeSheetNotification extends Notification
         $greeting = 'Hi ' . $greetingNames;
 
         // Generate Excel in memory
-        $excelData = Excel::raw(new TimeSheetExport($this->from, $this->to, $this->client, $this->bucketProjectsOnly), \Maatwebsite\Excel\Excel::XLSX);
+        $excelData = Excel::raw(
+            new TimeSheetExport($this->startDate, $this->endDate, $this->client, $this->bucketProjectsOnly),
+            \Maatwebsite\Excel\Excel::XLSX
+        );
 
-        $mailMessage = NotificationTemplate::find(1);
+        $availableBucketHours = BucketHelper::bucketRemainingHours($this->client);
+
+        // Determine template based on bucket balance
+        $templateType = $availableBucketHours < 0
+            ? NotificationTemplateType::WEEKLY_TIMESHEET_SUBMITTED_NEGATIVE_BALANCE
+            : NotificationTemplateType::WEEKLY_TIMESHEET_SUBMITTED_POSITIVE_BALANCE;
+
+        $notificationTemplate = NotificationTemplate::where('template_type', $templateType)
+            ->where('client_id', $this->client->id)
+            ->first();
 
         // If both are in the same month & year, avoid repetition
-        if ($this->from->format('F Y') === $this->to->format('F Y')) {
-            $dateRange = $this->from->day . ' tot ' . $this->to->day . ' ' . $this->to->translatedFormat('F Y');
+        if ($this->startDate->format('F Y') === $this->endDate->format('F Y')) {
+            $dateRange = $this->startDate->day . ' tot ' . $this->endDate->day . ' ' . $this->endDate->translatedFormat('F Y');
         } else {
             // Different month/year -> show full dates
-            $dateRange = $this->from->translatedFormat('d F Y') . ' tot ' . $this->to->translatedFormat('d F Y');
+            $dateRange = $this->startDate->translatedFormat('d F Y') . ' tot ' . $this->endDate->translatedFormat('d F Y');
         }
 
-        $mailMessage->content = str_replace('{{bucket_available_hours}}', BucketHelper::bucketRemainingHours($this->client), $mailMessage->content);
-        $mailMessage->content = str_replace('{{week_date_range_afr}}', $dateRange, $mailMessage->content);
+        $formattedBucketHours = $availableBucketHours < 0
+            ? '<span style="color: red; font-weight: bold;">' . $availableBucketHours . '</span>'
+            : $availableBucketHours;
+
+        $emailContent = str_replace('{{bucket_available_hours}}', $formattedBucketHours, $notificationTemplate->content);
+        $emailContent = str_replace('{{week_date_range_afr}}', $dateRange, $emailContent);
+        $emailSubject = str_replace('{{week_date_range_afr}}', $dateRange, $notificationTemplate->subject);
 
         return (new MailMessage())
             ->greeting($greeting)
-            ->subject(str_replace('{{week_date_range_afr}}', $dateRange, $mailMessage->subject))
-            ->line(new HtmlString(nl2br($mailMessage->content)))
-            ->attachData($excelData, 'timesheet_report_' . $this->from->format('Y-m-d') . '_to_' . $this->to->format('Y-m-d') . '.xlsx', [
-                'mime' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-            ]);
+            ->subject($emailSubject)
+            ->line(new HtmlString(nl2br($emailContent)))
+            ->attachData(
+                $excelData,
+                'timesheet_report_' . $this->startDate->format('Y-m-d') . '_to_' . $this->endDate->format('Y-m-d') . '.xlsx',
+                ['mime' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']
+            );
     }
 
     /**
