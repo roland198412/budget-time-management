@@ -1,6 +1,12 @@
 <section>
     @include('partials.heading', ['heading' => __('Notification Templates'), 'description' => __('Manage your notification templates') ])
     <div class="h-full w-full flex-1">
+        @if (session()->has('message'))
+            <div class="mb-4 p-4 bg-green-100 text-green-700 rounded">
+                {{ session('message') }}
+            </div>
+        @endif
+
         <flux:button variant="primary" size="sm" :href="route('notification-templates.create')" class="mb-4" >
             {{ __('Create') }}
         </flux:button>
@@ -63,6 +69,10 @@
                         <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900 border  border-gray-100 p-1">
                             <flux:button size="xs" variant="primary" :href="route('notification-templates.edit', $template)">
                                 {{ __('Edit') }}
+                            </flux:button>
+
+                            <flux:button size="xs" variant="ghost" wire:click="duplicate({{ $template->id }})" wire:confirm="{{ __('Are you sure you want to duplicate this template?') }}">
+                                {{ __('Duplicate') }}
                             </flux:button>
 
                             <flux:button size="xs" variant="danger" wire:click="delete({{ $template->id }})" wire:confirm="{{ __('Are you sure you want to delete this template?') }}">
