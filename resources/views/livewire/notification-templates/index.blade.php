@@ -71,7 +71,7 @@
                                 {{ __('Edit') }}
                             </flux:button>
 
-                            <flux:button size="xs" variant="ghost" wire:click="duplicate({{ $template->id }})" wire:confirm="{{ __('Are you sure you want to duplicate this template?') }}">
+                            <flux:button size="xs" variant="filled" wire:click="duplicate({{ $template->id }})" wire:confirm="{{ __('Are you sure you want to duplicate this template?') }}">
                                 {{ __('Duplicate') }}
                             </flux:button>
 
