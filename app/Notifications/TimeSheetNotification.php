@@ -15,7 +15,7 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class TimeSheetNotification extends Notification
 {
-    use Queueable;
+//    use Queueable;
 
     private array $contactNames;
 
