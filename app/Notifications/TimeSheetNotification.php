@@ -91,6 +91,7 @@ class TimeSheetNotification extends Notification
         $emailSubject = str_replace('{{week_date_range_afr}}', $dateRange, $notificationTemplate->subject);
 
         return (new MailMessage())
+            ->bcc(config('app.admin_email'))
             ->greeting($greeting)
             ->subject($emailSubject)
             ->line(new HtmlString(nl2br($emailContent)))

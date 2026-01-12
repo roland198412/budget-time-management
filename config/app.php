@@ -86,6 +86,18 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Application Admin Email
+    |--------------------------------------------------------------------------
+    |
+    | This email address will be BCC'd on all outgoing emails from the
+    | application. This is useful for monitoring and record keeping.
+    |
+    */
+
+    'admin_email' => env('APP_ADMIN_EMAIL', 'admin@example.com'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Encryption Key
     |--------------------------------------------------------------------------
     |
