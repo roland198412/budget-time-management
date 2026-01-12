@@ -1,8 +1,4 @@
 <x-mail::message>
-{{-- Override header to remove app name --}}
-<x-slot:header>
-</x-slot:header>
-
 {{-- Greeting --}}
 @if (! empty($greeting))
 # {{ $greeting }}
@@ -56,4 +52,8 @@
 ) <span class="break-all">[{{ $displayableActionUrl }}]({{ $actionUrl }})</span>
 </x-slot:subcopy>
 @endisset
+
+
+
+
 </x-mail::message>
